@@ -1,0 +1,14 @@
+{
+    "games": [
+        {
+            "name": "Zombicide",
+            "minPlayers": 1,
+            "maxPlayers": 6            
+        },
+        {
+            "name": "Legendary",
+            "minPlayers": 1,
+            "maxPlayers": 4         
+        }
+    ]
+}

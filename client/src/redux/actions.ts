@@ -37,7 +37,7 @@ export function fetchGame(game: string): BOARDGAME_SERVER_ACTION {
         payload: {
             request: {
                 method: 'get',
-                url: '/game/:' + game
+                url: `/games/${game}`
             }
         }
     }

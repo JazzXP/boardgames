@@ -9,7 +9,7 @@ import axiosMiddleware from 'redux-axios-middleware';
 import reducer from './redux/reducer';
 import { BoardgameServerState } from './redux/state'
 import { GamesListContainer } from './components/GamesList';
-import { Game } from './components/Game';
+import { GamePageContainer } from './components/GamePage';
 
 const client = axios.create({
     baseURL: 'http://localhost:3030/api/v1',
@@ -25,7 +25,7 @@ const store: Store<BoardgameServerState> = createStore(
 const routes = 
     <div>
         <Route exact path="/" component={GamesListContainer} />
-        <Route path="/games/" component={Game} />
+        <Route path="/games/:name" component={GamePageContainer} />
     </div>
 
 ReactDOM.render(

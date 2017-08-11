@@ -32,7 +32,7 @@ export class GamesList extends React.Component<GamesListProps & GamesListConnect
         return <div className="gamesList">
             <ul>
             {this.getList().map((game: string) => 
-                <li key={game}><Link to="/games/{game}">{game}</Link></li>
+                <li key={game}><Link to={`/games/${game}`}>{game}</Link></li>
             )}
             </ul>
         </div>;

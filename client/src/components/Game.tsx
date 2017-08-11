@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { List } from 'immutable';
-import { BoardgameServerState } from '../../../server/src/state';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { BOARDGAME } from '../redux/state';
+import { Link } from 'react-router-dom';
+import { BOARDGAME, BoardgameServerState } from '../redux/state';
+
 
 export interface GameProps {
     name: string,
@@ -20,7 +21,7 @@ const defaultMinPlayers = 0;
 const defaultMaxPlayers = undefined;
 const defaultBoxArt = undefined;
 const defaultBoardgameGeekLink = undefined;
-export class Game extends React.Component<GameProps, GameState> {
+export class Game extends React.PureComponent<GameProps, GameState> {
     getName(): JSX.Element {
         return <span><span>Name:</span><span>{this.props.name}</span></span>;
     }
@@ -52,19 +53,22 @@ export class Game extends React.Component<GameProps, GameState> {
             { this.getMaxPlayers() }<br />
             { this.getBoxArt() }<br />
             { this.getBoardgameGeekLink() }<br />
+            <Link to="/">Back to Main</Link>
         </div>;
     }
 }
 
 
 function mapStateToProps(state: BoardgameServerState, ownProps: GameProps): GameProps {
-    return {
-        name: state.get('game').name,
-        minPlayers: state.get('game').minPlayers,
-        maxPlayers: state.get('game').maxPlayers,
-        boxArt: state.get('game').boxArt,
-        boardgameGeekLink: state.get('game').boardgameGeekLink
-    }
+    const game: any = state.get('game');
+    const gameProps: GameProps = {
+        name: game ? game.get('name') : defaultName,
+        minPlayers: game ? game.get('minPlayers') : 0,
+        maxPlayers: game ? game.get('maxPlayers') : undefined,
+        boxArt: game ? game.get('boxArt') : undefined,
+        boardgameGeekLink: game ? game.get('boardgameGeekLink') : undefined
+    } 
+    return gameProps;
 }
 
 //function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION>): 

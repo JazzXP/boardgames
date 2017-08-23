@@ -83,6 +83,14 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
             return newState.set('editMode', action.editMode);
         case GameEdit.GAME_EDIT_NAME:
             return newState.setIn(['game', 'name'], action.name);
+        case GameEdit.GAME_EDIT_MIN_PLAYERS:
+            return newState.setIn(['game', 'minPlayers'], action.minPlayers);
+        case GameEdit.GAME_EDIT_MAX_PLAYERS:
+            return newState.setIn(['game', 'maxPlayers'], action.maxPlayers);
+        case GameEdit.GAME_EDIT_BOX_ART:
+            return newState.setIn(['game', 'boxArt'], action.boxArt);
+        case GameEdit.GAME_EDIT_BBG_LINK:
+            return newState.setIn(['game', 'boardgameGeekLink'], action.boardgameGeekLink);
     }
     return newState;
 }

@@ -10,20 +10,20 @@ export type GameEditNameAction = {
 
 export type GameEditMinPlayersAction = {
     type: GameEdit.GAME_EDIT_MIN_PLAYERS,
-    players: number
+    minPlayers: number
 }
 
 export type GameEditMaxPlayersAction = {
     type: GameEdit.GAME_EDIT_MAX_PLAYERS,
-    players: number
+    maxPlayers: number
 }
 
 export type GameEditBoxArtAction = {
     type: GameEdit.GAME_EDIT_BOX_ART,
-    link: string
+    boxArt: string
 }
 
 export type GameEditBBGLinkAction = {
     type: GameEdit.GAME_EDIT_BBG_LINK,
-    link: string
+    boardgameGeekLink: string
 }

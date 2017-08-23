@@ -1,9 +1,9 @@
 import { List, Map } from 'immutable';
-import { ADD_ENTRY, FETCH_GAME, FETCH_GAMES, SERVER_SET_LIST, SET_ENTRIES } from './constants';
+import { ADD_ENTRY, FETCH_GAME, FETCH_GAMES, SERVER_SET_LIST, SET_EDIT_MODE, SET_ENTRIES } from './constants';
 import { BOARDGAME_SERVER_STATE, BOARDGAME, BoardgameServerState } from './state';
 
 type _BOARDGAME_SERVER_ACTION = {
-    type: ADD_ENTRY | SET_ENTRIES | SERVER_SET_LIST | FETCH_GAME | '';
+    type: ADD_ENTRY | SET_ENTRIES | SERVER_SET_LIST | FETCH_GAME | SET_EDIT_MODE | '';
 }
 
 export type BOARDGAME_SERVER_ACTION = _BOARDGAME_SERVER_ACTION & BOARDGAME_SERVER_STATE;
@@ -52,5 +52,12 @@ export function fetchGames() {
                 url: '/games'
             }
         }
+    }
+}
+
+export function setEditModeAction(editMode: boolean): BOARDGAME_SERVER_ACTION {
+    return {
+        type: SET_EDIT_MODE,
+        editMode: editMode
     }
 }

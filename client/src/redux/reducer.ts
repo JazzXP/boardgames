@@ -1,9 +1,34 @@
-import { ADD_ENTRY, FETCH_GAME_SUCCESS, FETCH_GAMES_SUCCESS, SERVER_SET_LIST, SET_ENTRIES } from './constants';
-import { AddEntry, FetchGame, ServerSetList, SetEntriesAction, FetchGameSuccess, FetchGamesSuccess } from './action_types';
+import {
+    ADD_ENTRY,
+    FETCH_GAME_SUCCESS,
+    FETCH_GAMES_SUCCESS,
+    SERVER_SET_LIST,
+    SET_EDIT_MODE,
+    SET_ENTRIES,
+    GameEdit
+} from './constants';
+import {
+    AddEntry,
+    FetchGame,
+    FetchGamesSuccess,
+    FetchGameSuccess,
+    ServerSetList,
+    SetEditMode,
+    SetEntriesAction,
+} from './action_types';
+
+import { 
+    GameEditNameAction,
+    GameEditMinPlayersAction,
+    GameEditMaxPlayersAction,
+    GameEditBoxArtAction,
+    GameEditBBGLinkAction
+ } from './gameEditActionTypes'
+
 import { List, fromJS } from 'immutable';
 import { BoardgameServerState, INITIAL_STATE, BOARDGAME } from './state';
 
-type AllActions = SetEntriesAction | AddEntry | ServerSetList | FetchGameSuccess | FetchGamesSuccess
+type AllActions = SetEntriesAction | AddEntry | ServerSetList | FetchGameSuccess | FetchGamesSuccess | SetEditMode | GameEditNameAction | GameEditMinPlayersAction | GameEditMaxPlayersAction | GameEditBoxArtAction | GameEditBBGLinkAction
 
 export function setEntries(state: BoardgameServerState, entries: List<BOARDGAME> | Array<BOARDGAME>): BoardgameServerState {
     return state.set('games', List(entries))
@@ -54,6 +79,10 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
             return fetchGamesSuccess(newState, action.payload.data.games)
         case FETCH_GAME_SUCCESS:
             return fetchGameSuccess(newState, action.payload.data.game)
+        case SET_EDIT_MODE:
+            return newState.set('editMode', action.editMode);
+        case GameEdit.GAME_EDIT_NAME:
+            return newState.setIn(['game', 'name'], action.name);
     }
     return newState;
 }

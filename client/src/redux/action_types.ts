@@ -41,3 +41,8 @@ export type FetchGamesSuccess = {
     type: CONSTANTS.FETCH_GAMES_SUCCESS,
     payload: AxiosResponse
 }
+
+export type SetEditMode = {
+    type: CONSTANTS.SET_EDIT_MODE,
+    editMode: boolean
+}

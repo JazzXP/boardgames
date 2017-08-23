@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Route, BrowserRouter } from 'react-router-dom';
-import { createStore, applyMiddleware, Store } from 'redux';
+import { Route, HashRouter } from 'react-router-dom';
+import { applyMiddleware, combineReducers, createStore, Store } from 'redux';
 import { Provider } from 'react-redux';
 import axios from 'axios'
 import axiosMiddleware from 'redux-axios-middleware';
 
 import reducer from './redux/reducer';
+import gameEditReducer from './redux/gameEditReducer';
 import { BoardgameServerState } from './redux/state'
 import { GamesListContainer } from './components/GamesList';
 import { GamePageContainer } from './components/GamePage';
@@ -18,7 +19,8 @@ const client = axios.create({
 
 const store: Store<BoardgameServerState> = createStore(
     reducer, 
-    applyMiddleware(axiosMiddleware(client))) as Store<BoardgameServerState>;
+    applyMiddleware(axiosMiddleware(client))
+) as Store<BoardgameServerState>;
 
 
 
@@ -30,9 +32,9 @@ const routes =
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <HashRouter>
             {routes}
-        </BrowserRouter>
+        </HashRouter>
     </Provider>,
     document.getElementById('root')
 )

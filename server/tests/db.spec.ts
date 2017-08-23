@@ -38,7 +38,7 @@ class TestDatabase {
             name: dummyName,
             minPlayers: 1,
             maxPlayers: 5
-        });
+        }, (success: boolean) => {});
         db.getGame(dummyName, (game: BOARDGAME) => {
             expect(game.name).to.equal(dummyName);
             // Cleanup

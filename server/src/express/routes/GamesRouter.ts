@@ -47,9 +47,37 @@ export class GamesRouter {
         });
     }
 
+    public setOne(req: Request, res: Response, next: NextFunction) {
+        let name: string = req.body.name;
+        const db: IDB = container.get<IDB>(SERVICE_IDENTIFIER.DB);
+        // Lookup game
+        db.getGame(name, (game: BOARDGAME) => {
+            let newGame = Object.assign(game, req.body);
+            db.addGame(newGame, (success: boolean) => {
+                if (success) {
+                    res.status(200)
+                        .send({
+                            message: `Success`,
+                            status: res.status,
+                            game: newGame
+                        });
+                }
+                else {
+                    res.status(500)
+                        .send({
+                            message: `Failed`,
+                            status: res.status,
+                            game: game
+                        });
+                }
+            });
+        });
+    }
+
     init() {
         this.router.get('/', this.getAll);
         this.router.get('/:id', this.getOne);
+        this.router.post('/:id', this.setOne);
     }
 }
 

@@ -9,49 +9,78 @@ type _BOARDGAME_EDIT_ACTION = {
             GameEdit.GAME_EDIT_BOX_ART |
             GameEdit.GAME_EDIT_BBG_LINK |
             '';
+    payload?: any;
 }
 
-export type BOARDGAME_SERVER_ACTION = _BOARDGAME_EDIT_ACTION & BOARDGAME;
+export type BOARDGAME_SERVER_ACTION = _BOARDGAME_EDIT_ACTION;
 
 export function setGameEditNameAction(name: string): BOARDGAME_SERVER_ACTION {
     return {
         type: GameEdit.GAME_EDIT_NAME,
-        name: name
+        //name: name
     }
 }
 
 export function setGameMinPlayersAction(name: string, players?: number): BOARDGAME_SERVER_ACTION {
     return {
         type: GameEdit.GAME_EDIT_MIN_PLAYERS,
-        name: name,
-        minPlayers: players
+        payload: {
+            request: {
+                method: 'post',
+                url: `/games/${name}`,
+                data: {
+                    name: name,
+                    minPlayers: players 
+                }
+            }
+        }
     }
 }
 
 export function setGameMaxPlayersAction(name: string, players?: number): BOARDGAME_SERVER_ACTION {
     return {
         type: GameEdit.GAME_EDIT_MAX_PLAYERS,
-        name: name,
-        maxPlayers: players
+        payload: {
+            request: {
+                method: 'post',
+                url: `/games/${name}`,
+                data: {
+                    name: name,
+                    maxPlayers: players 
+                }
+            }
+        }
     }
 }
 
 export function setGameBoxArtAction(name: string, link?: string): BOARDGAME_SERVER_ACTION {
-    if (link && link.length === 0)
-        link = undefined;
     return {
         type: GameEdit.GAME_EDIT_BOX_ART,
-        name: name,
-        boxArt: link
+        payload: {
+            request: {
+                method: 'post',
+                url: `/games/${name}`,
+                data: {
+                    name: name,
+                    boxArt: link 
+                }
+            }
+        }
     }
 }
 
 export function setGameBBGLinkAction(name: string, link?: string): BOARDGAME_SERVER_ACTION {
-    if (link && link.length === 0)
-        link = undefined;
     return {
         type: GameEdit.GAME_EDIT_BBG_LINK,
-        name: name,
-        boardgameGeekLink: link
+        payload: {
+            request: {
+                method: 'post',
+                url: `/games/${name}`,
+                data: {
+                    name: name,
+                    boardgameGeekLink: link 
+                }
+            }
+        }
     }
 }

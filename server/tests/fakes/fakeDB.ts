@@ -10,8 +10,9 @@ import { List } from 'immutable';
 export default class FakeDB implements IDB {
     private MockGames = require('./games');
 
-    addGame(game: BOARDGAME): void {
+    addGame(game: BOARDGAME, callback: (success: boolean) => void): void {
         this.MockGames.games.push(game);
+        callback(true);
     }
 
     getGame(game: string, callback: (game: BOARDGAME) => void): void {

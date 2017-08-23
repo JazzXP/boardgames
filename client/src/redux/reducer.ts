@@ -19,16 +19,26 @@ import {
 
 import { 
     GameEditNameAction,
-    GameEditMinPlayersAction,
-    GameEditMaxPlayersAction,
-    GameEditBoxArtAction,
-    GameEditBBGLinkAction
+    GameEditMinPlayersActionSuccess,
+    GameEditMaxPlayersActionSuccess,
+    GameEditBoxArtActionSuccess,
+    GameEditBBGLinkActionSuccess
  } from './gameEditActionTypes'
 
 import { List, fromJS } from 'immutable';
 import { BoardgameServerState, INITIAL_STATE, BOARDGAME } from './state';
 
-type AllActions = SetEntriesAction | AddEntry | ServerSetList | FetchGameSuccess | FetchGamesSuccess | SetEditMode | GameEditNameAction | GameEditMinPlayersAction | GameEditMaxPlayersAction | GameEditBoxArtAction | GameEditBBGLinkAction
+type AllActions =   SetEntriesAction | 
+                    AddEntry | 
+                    ServerSetList | 
+                    FetchGameSuccess | 
+                    FetchGamesSuccess | 
+                    SetEditMode | 
+                    GameEditNameAction | 
+                    GameEditMinPlayersActionSuccess | 
+                    GameEditMaxPlayersActionSuccess | 
+                    GameEditBoxArtActionSuccess | 
+                    GameEditBBGLinkActionSuccess
 
 export function setEntries(state: BoardgameServerState, entries: List<BOARDGAME> | Array<BOARDGAME>): BoardgameServerState {
     return state.set('games', List(entries))
@@ -82,15 +92,16 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
         case SET_EDIT_MODE:
             return newState.set('editMode', action.editMode);
         case GameEdit.GAME_EDIT_NAME:
-            return newState.setIn(['game', 'name'], action.name);
-        case GameEdit.GAME_EDIT_MIN_PLAYERS:
-            return newState.setIn(['game', 'minPlayers'], action.minPlayers);
-        case GameEdit.GAME_EDIT_MAX_PLAYERS:
-            return newState.setIn(['game', 'maxPlayers'], action.maxPlayers);
-        case GameEdit.GAME_EDIT_BOX_ART:
-            return newState.setIn(['game', 'boxArt'], action.boxArt);
-        case GameEdit.GAME_EDIT_BBG_LINK:
-            return newState.setIn(['game', 'boardgameGeekLink'], action.boardgameGeekLink);
+            //return newState.setIn(['game', 'name'], action.name);
+            return newState;
+        case GameEdit.GAME_EDIT_MIN_PLAYERS_SUCCESS:
+            return newState.merge({game: action.payload.data.game});
+        case GameEdit.GAME_EDIT_MAX_PLAYERS_SUCCESS:
+            return newState.merge({game: action.payload.data.game});
+        case GameEdit.GAME_EDIT_BOX_ART_SUCCESS:
+            return newState.merge({game: action.payload.data.game});
+        case GameEdit.GAME_EDIT_BBG_LINK_SUCCESS:
+            return newState.merge({game: action.payload.data.game});
     }
     return newState;
 }

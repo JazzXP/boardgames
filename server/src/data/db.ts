@@ -14,7 +14,16 @@ export class DB implements IDB {
     constructor() {
         this.db = Monk.default('localhost:27017/boardgames');
     }
-    
+    addGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
+        this.db.get('games').insert(game)
+            .then((doc) => {
+                callback(true, doc);
+            })
+            .catch((err) => {
+                callback(false, undefined);
+                throw 'Unable to insert';
+            });
+    }
     updateGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
         this.db.get('games').update({"name": game.name}, game)
             .then((doc) => {

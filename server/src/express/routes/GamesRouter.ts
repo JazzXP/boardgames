@@ -3,7 +3,6 @@ import IDB from '../../interfaces/IDB';
 import { BOARDGAME, BOARDGAME_UPDATE } from '../../state';
 import { Router, Request, Response, NextFunction } from 'express';
 import { Store } from 'redux';
-import { BoardgameServerState } from '../../state';
 import { List } from 'immutable';
 import container from '../../config/ioc_config';
 
@@ -47,7 +46,7 @@ export class GamesRouter {
         });
     }
 
-    public setOne(req: Request, res: Response, next: NextFunction) {
+    public updateOne(req: Request, res: Response, next: NextFunction) {
         let name: string = req.body.name;
         const db: IDB = container.get<IDB>(SERVICE_IDENTIFIER.DB);
         let update: BOARDGAME_UPDATE = JSON.parse(JSON.stringify({
@@ -76,13 +75,44 @@ export class GamesRouter {
                     });
             }
         });
+    }
 
+    public addOne(req: Request, res: Response, next: NextFunction) {
+        let name: string = req.body.name;
+        const db: IDB = container.get<IDB>(SERVICE_IDENTIFIER.DB);
+        let addItem: BOARDGAME = JSON.parse(JSON.stringify({
+            name: name,
+            minPlayers: req.body.minPlayers,
+            maxPlayers: req.body.maxPlayers,
+            boxArt: req.body.boxArt,
+            boardgameGeekLink: req.body.boardgameGeekLink
+        }));
+
+        db.addGame(addItem, (success: boolean, game: BOARDGAME | undefined) => {
+            if (success) {
+                res.status(200)
+                    .send({
+                        message: `Success`,
+                        status: res.status,
+                        game: game
+                    });
+            }
+            else {
+                res.status(500)
+                    .send({
+                        message: `Failed`,
+                        status: res.status,
+                        game: game
+                    });
+            }
+        });
     }
 
     init() {
         this.router.get('/', this.getAll);
         this.router.get('/:id', this.getOne);
-        this.router.post('/:id', this.setOne);
+        this.router.post('/:id/update', this.updateOne);
+        this.router.post('/:id/add', this.addOne);
     }
 }
 

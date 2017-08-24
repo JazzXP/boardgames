@@ -1,4 +1,3 @@
-import SERVICE_IDENTIFIER from '../constants';
 import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';

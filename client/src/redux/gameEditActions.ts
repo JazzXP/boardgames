@@ -27,10 +27,10 @@ export function setGameMinPlayersAction(name: string, players?: number): BOARDGA
         payload: {
             request: {
                 method: 'post',
-                url: `/games/${name}`,
+                url: `/games/${name}/update`,
                 data: {
                     name: name,
-                    minPlayers: players 
+                    minPlayers: players
                 }
             }
         }

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { BOARDGAME } from '../../src/state';
+import { BOARDGAME, BOARDGAME_UPDATE } from '../../src/state';
 import IDB from '../../src/interfaces/IDB';
 
 import { injectable } from 'inversify';
@@ -10,9 +10,9 @@ import { List } from 'immutable';
 export default class FakeDB implements IDB {
     private MockGames = require('./games');
 
-    addGame(game: BOARDGAME, callback: (success: boolean) => void): void {
+    updateGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
         this.MockGames.games.push(game);
-        callback(true);
+        callback(true, game as BOARDGAME);
     }
 
     getGame(game: string, callback: (game: BOARDGAME) => void): void {

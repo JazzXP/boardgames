@@ -1,9 +1,9 @@
-import { BOARDGAME } from '../state';
+import { BOARDGAME, BOARDGAME_UPDATE } from '../state';
 import { List } from 'immutable';
 
 interface IDB {
-    addGame(game: BOARDGAME, callback: (success: boolean) => void): void;
-    getGame(game: string, callback: (game: BOARDGAME) => void): void;
+    updateGame(game: BOARDGAME_UPDATE, callback: (success: boolean, game: BOARDGAME | undefined) => void): void;
+    getGame(game: string, callback: (game: BOARDGAME_UPDATE) => void): void;
     getAllGames(callback: (games: List<string>) => void): void;
     removeGame(game: string): void;
 } 

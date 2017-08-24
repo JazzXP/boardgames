@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { BOARDGAME } from '../state';
+import { BOARDGAME, BOARDGAME_UPDATE } from '../state';
 import { injectable } from 'inversify';
 import { List } from 'immutable';
 import * as MongoDB from 'mongodb';
@@ -15,11 +15,26 @@ export class DB implements IDB {
         this.db = Monk.default('localhost:27017/boardgames');
     }
     
-    addGame(game: BOARDGAME, callback: (success: boolean) => void): void {
-        this.db.get('games').update({game: game.name}, game)
+    updateGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
+        this.db.get('games').update({"name": game.name}, game)
             .then((doc) => {
-                console.log(doc)
-                callback(true);
+                if (!doc) {
+                    callback(false, undefined);
+                    throw 'Unable to update';
+                }
+                this.db.get('games').findOne({game: game.name}).then((doc) => {
+                    if (!doc) {
+                        callback(false, undefined);
+                        throw 'Unable to find';
+                    }
+                    callback(true, doc);
+                }).catch((err) => {
+                    callback(false, undefined);
+                    throw err;
+                });
+            }).catch((err) => {
+                callback(false, undefined);
+                throw err;
             });
     }
 

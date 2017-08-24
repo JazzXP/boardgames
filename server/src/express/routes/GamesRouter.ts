@@ -1,6 +1,6 @@
 import SERVICE_IDENTIFIER from '../../constants';
 import IDB from '../../interfaces/IDB';
-import { BOARDGAME } from '../../state';
+import { BOARDGAME, BOARDGAME_UPDATE } from '../../state';
 import { Router, Request, Response, NextFunction } from 'express';
 import { Store } from 'redux';
 import { BoardgameServerState } from '../../state';
@@ -50,28 +50,33 @@ export class GamesRouter {
     public setOne(req: Request, res: Response, next: NextFunction) {
         let name: string = req.body.name;
         const db: IDB = container.get<IDB>(SERVICE_IDENTIFIER.DB);
+        let update: BOARDGAME_UPDATE = JSON.parse(JSON.stringify({
+            name: name,
+            minPlayers: req.body.minPlayers,
+            maxPlayers: req.body.maxPlayers,
+            boxArt: req.body.boxArt,
+            boardgameGeekLink: req.body.boardgameGeekLink
+        }));
         // Lookup game
-        db.getGame(name, (game: BOARDGAME) => {
-            let newGame = Object.assign(game, req.body);
-            db.addGame(newGame, (success: boolean) => {
-                if (success) {
-                    res.status(200)
-                        .send({
-                            message: `Success`,
-                            status: res.status,
-                            game: newGame
-                        });
-                }
-                else {
-                    res.status(500)
-                        .send({
-                            message: `Failed`,
-                            status: res.status,
-                            game: game
-                        });
-                }
-            });
+        db.updateGame(update, (success: boolean, game: BOARDGAME | undefined) => {
+            if (success) {
+                res.status(200)
+                    .send({
+                        message: `Success`,
+                        status: res.status,
+                        game: game
+                    });
+            }
+            else {
+                res.status(500)
+                    .send({
+                        message: `Failed`,
+                        status: res.status,
+                        game: game
+                    });
+            }
         });
+
     }
 
     init() {

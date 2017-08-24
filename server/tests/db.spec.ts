@@ -31,18 +31,24 @@ class TestDatabase {
     }
 
     @test('adding an entry adds a value')
-    addEntryAddsValue() {
+    addEntryAddsValue(done: any) {
         const db = new DB();
         const dummyName = 'BlahBlahBlah';
-        db.addGame({
-            name: dummyName,
-            minPlayers: 1,
-            maxPlayers: 5
-        }, (success: boolean) => {});
-        db.getGame(dummyName, (game: BOARDGAME) => {
-            expect(game.name).to.equal(dummyName);
-            // Cleanup
-            db.removeGame(dummyName);
-        });
+        try {
+            db.updateGame({
+                name: dummyName,
+                minPlayers: 1,
+                maxPlayers: 5
+            }, (success: boolean, gameUpdate: BOARDGAME | undefined) => {
+                expect(success).to.be.true;
+                expect(gameUpdate).to.not.be.undefined;
+                expect(gameUpdate!.name).to.equal(dummyName);
+                done();
+            });
+        }
+        catch (err) {
+            console.log(err);
+            done();
+        }
     }
 }

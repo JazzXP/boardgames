@@ -2,7 +2,6 @@ import SERVICE_IDENTIFIER from '../../constants';
 import IDB from '../../interfaces/IDB';
 import { BOARDGAME, BOARDGAME_UPDATE } from '../../state';
 import { Router, Request, Response, NextFunction } from 'express';
-import { Store } from 'redux';
 import { List } from 'immutable';
 import container from '../../config/ioc_config';
 

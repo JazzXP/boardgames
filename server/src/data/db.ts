@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { BOARDGAME, BOARDGAME_UPDATE } from '../state';
 import { injectable } from 'inversify';
 import { List } from 'immutable';
-import * as MongoDB from 'mongodb';
 import * as Monk from 'monk';
 
 import IDB from '../interfaces/IDB';

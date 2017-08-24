@@ -1,20 +1,13 @@
 import {
-    ADD_ENTRY,
-    FETCH_GAME_SUCCESS,
-    FETCH_GAMES_SUCCESS,
-    SERVER_SET_LIST,
+    FetchGameAction,
     SET_EDIT_MODE,
-    SET_ENTRIES,
     GameEdit
 } from './constants';
 import {
-    AddEntry,
     FetchGame,
     FetchGamesSuccess,
     FetchGameSuccess,
-    ServerSetList,
     SetEditMode,
-    SetEntriesAction,
 } from './action_types';
 
 import { 
@@ -28,10 +21,7 @@ import {
 import { List, fromJS } from 'immutable';
 import { BoardgameServerState, INITIAL_STATE, BOARDGAME } from './state';
 
-type AllActions =   SetEntriesAction | 
-                    AddEntry | 
-                    ServerSetList | 
-                    FetchGameSuccess | 
+type AllActions =   FetchGameSuccess | 
                     FetchGamesSuccess | 
                     SetEditMode | 
                     GameEditNameAction | 
@@ -79,15 +69,9 @@ function fetchGameSuccess(state: BoardgameServerState, game: BOARDGAME) {
 export default function reducer(state: BoardgameServerState = INITIAL_STATE, action: AllActions): BoardgameServerState {
     let newState: BoardgameServerState = fromJS(state);
     switch (action.type) {
-        case ADD_ENTRY:
-            return addEntry(newState, action.entry);
-        case SET_ENTRIES:
-            return setEntries(newState, action.entries);
-        case SERVER_SET_LIST:
-            return serverSetList(newState, action.games);
-        case FETCH_GAMES_SUCCESS:
+        case FetchGameAction.FETCH_GAMES_SUCCESS:
             return fetchGamesSuccess(newState, action.payload.data.games)
-        case FETCH_GAME_SUCCESS:
+        case FetchGameAction.FETCH_GAME_SUCCESS:
             return fetchGameSuccess(newState, action.payload.data.game)
         case SET_EDIT_MODE:
             return newState.set('editMode', action.editMode);

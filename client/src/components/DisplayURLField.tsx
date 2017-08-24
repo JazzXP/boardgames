@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface DisplayURLFieldProps {
     label: string,
     url?: string,
-    editMode?: boolean;
+    editMode: boolean;
     onBlur?: Function;
 }
 

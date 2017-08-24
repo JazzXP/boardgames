@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface DisplayImageFieldProps {
     label: string,
     imageURL?: string,
-    editMode?: boolean,
+    editMode: boolean,
     onBlur?: Function
 }
 

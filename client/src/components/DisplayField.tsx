@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface DisplayFieldProps {
     label: string,
     fieldVal: string,
-    editMode?: boolean,
+    editMode: boolean,
     onBlur?: Function
 }
 

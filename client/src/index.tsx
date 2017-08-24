@@ -11,6 +11,7 @@ import gameEditReducer from './redux/gameEditReducer';
 import { BoardgameServerState } from './redux/state'
 import { GamesListContainer } from './components/GamesList';
 import { GamePageContainer } from './components/GamePage';
+import { AddGamePageContainer } from './components/AddGame';
 
 const client = axios.create({
     baseURL: 'http://localhost:3030/api/v1',
@@ -28,6 +29,7 @@ const routes =
     <div>
         <Route exact path="/" component={GamesListContainer} />
         <Route path="/games/:name" component={GamePageContainer} />
+        <Route path="/addGame" component={AddGamePageContainer} />
     </div>
 
 ReactDOM.render(

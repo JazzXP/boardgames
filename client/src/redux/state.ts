@@ -1,4 +1,3 @@
-import { ADD_ENTRY, SERVER_SET_LIST, SET_ENTRIES } from './constants';
 import { Record, List } from 'immutable';
 
 export type BOARDGAME = {

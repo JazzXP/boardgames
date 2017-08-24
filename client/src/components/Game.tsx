@@ -24,7 +24,7 @@ export interface GameProps {
     maxPlayers?: number,
     boxArt?: string,
     boardgameGeekLink?: string,
-    editMode?: boolean
+    editMode: boolean
     game?: BoardgameServerState;
 }
 

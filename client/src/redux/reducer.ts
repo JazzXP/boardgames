@@ -1,6 +1,7 @@
 import {
     FetchGameAction,
     SET_EDIT_MODE,
+    SET_BOARDGAME_STATE,
     GameEdit
 } from './constants';
 import {
@@ -8,14 +9,20 @@ import {
     FetchGamesSuccess,
     FetchGameSuccess,
     SetEditMode,
+    SetBoardGameState
 } from './action_types';
 
 import { 
-    GameEditNameAction,
     GameEditMinPlayersActionSuccess,
     GameEditMaxPlayersActionSuccess,
     GameEditBoxArtActionSuccess,
-    GameEditBBGLinkActionSuccess
+    GameEditBBGLinkActionSuccess,
+    GameEditSaveNewActionSuccess,
+    UpdateNameNoSave,
+    UpdateMinPlayersNoSave,
+    UpdateMaxPlayersNoSave,
+    UpdateBoxArtNoSave,
+    UpdateBoardgameGeekLinkNoSave
  } from './gameEditActionTypes'
 
 import { List, fromJS } from 'immutable';
@@ -24,11 +31,17 @@ import { BoardgameServerState, INITIAL_STATE, BOARDGAME } from './state';
 type AllActions =   FetchGameSuccess | 
                     FetchGamesSuccess | 
                     SetEditMode | 
-                    GameEditNameAction | 
+                    SetBoardGameState |
                     GameEditMinPlayersActionSuccess | 
                     GameEditMaxPlayersActionSuccess | 
                     GameEditBoxArtActionSuccess | 
-                    GameEditBBGLinkActionSuccess
+                    GameEditBBGLinkActionSuccess |
+                    GameEditSaveNewActionSuccess |
+                    UpdateNameNoSave |
+                    UpdateMinPlayersNoSave |
+                    UpdateMaxPlayersNoSave |
+                    UpdateBoxArtNoSave |
+                    UpdateBoardgameGeekLinkNoSave;
 
 export function setEntries(state: BoardgameServerState, entries: List<BOARDGAME> | Array<BOARDGAME>): BoardgameServerState {
     return state.set('games', List(entries))
@@ -75,9 +88,8 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
             return fetchGameSuccess(newState, action.payload.data.game)
         case SET_EDIT_MODE:
             return newState.set('editMode', action.editMode);
-        case GameEdit.GAME_EDIT_NAME:
-            //return newState.setIn(['game', 'name'], action.name);
-            return newState;
+        case SET_BOARDGAME_STATE:
+            return newState.merge({game: action.game});
         case GameEdit.GAME_EDIT_MIN_PLAYERS_SUCCESS:
             return newState.merge({game: action.payload.data.game});
         case GameEdit.GAME_EDIT_MAX_PLAYERS_SUCCESS:
@@ -86,6 +98,38 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
             return newState.merge({game: action.payload.data.game});
         case GameEdit.GAME_EDIT_BBG_LINK_SUCCESS:
             return newState.merge({game: action.payload.data.game});
+        case GameEdit.GAME_EDIT_SAVE_NEW_SUCCESS:
+            return newState.merge({game: action.payload.data.game});
+        case GameEdit.UPDATE_NAME_NO_SAVE:
+        {
+            const game = newState.get('game');
+            const newGame = game.merge({name: action.name});
+            return newState.merge({game:newGame});
+        }
+        case GameEdit.UPDATE_MIN_PLAYERS_NO_SAVE:
+        {
+            const game = newState.get('game');
+            const newGame = game.merge({minPlayers: action.minPlayers});
+            return newState.merge({game:newGame});
+        }
+        case GameEdit.UPDATE_MAX_PLAYERS_NO_SAVE:
+        {
+            const game = newState.get('game');
+            const newGame = game.merge({maxPlayers: action.maxPlayers});
+            return newState.merge({game:newGame});
+        }
+        case GameEdit.UPDATE_BOX_ART_NO_SAVE:
+        {
+            const game = newState.get('game');
+            const newGame = game.merge({boxArt: action.boxArt});
+            return newState.merge({game:newGame});
+        }
+        case GameEdit.UPDATE_BBG_LINK_NO_SAVE:
+        {
+            const game = newState.get('game');
+            const newGame = game.merge({boardgameGeekLink: action.boardgameGeekLink});
+            return newState.merge({game:newGame});
+        }
     }
     return newState;
 }

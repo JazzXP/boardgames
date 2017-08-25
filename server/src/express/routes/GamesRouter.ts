@@ -66,6 +66,7 @@ export class GamesRouter {
                     });
             }
             else {
+                console.log('Error Updating: ' + game);
                 res.status(500)
                     .send({
                         message: `Failed`,
@@ -79,13 +80,7 @@ export class GamesRouter {
     public addOne(req: Request, res: Response, next: NextFunction) {
         let name: string = req.body.name;
         const db: IDB = container.get<IDB>(SERVICE_IDENTIFIER.DB);
-        let addItem: BOARDGAME = JSON.parse(JSON.stringify({
-            name: name,
-            minPlayers: req.body.minPlayers,
-            maxPlayers: req.body.maxPlayers,
-            boxArt: req.body.boxArt,
-            boardgameGeekLink: req.body.boardgameGeekLink
-        }));
+        let addItem: BOARDGAME = JSON.parse(JSON.stringify(req.body));
 
         db.addGame(addItem, (success: boolean, game: BOARDGAME | undefined) => {
             if (success) {

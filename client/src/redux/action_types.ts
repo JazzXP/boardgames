@@ -1,5 +1,5 @@
 import { BOARDGAME } from './state';
-import { SET_EDIT_MODE, FetchGameAction } from './constants';
+import { SET_EDIT_MODE, SET_BOARDGAME_STATE, FetchGameAction } from './constants';
 import { List } from 'immutable';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
@@ -30,4 +30,9 @@ export type FetchGamesSuccess = {
 export type SetEditMode = {
     type: SET_EDIT_MODE,
     editMode: boolean
+}
+
+export type SetBoardGameState = {
+    type: SET_BOARDGAME_STATE,
+    game: BOARDGAME
 }

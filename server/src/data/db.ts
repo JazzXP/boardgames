@@ -24,23 +24,25 @@ export class DB implements IDB {
             });
     }
     updateGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
-        this.db.get('games').update({"name": game.name}, game)
+        this.db.get('games').findOneAndUpdate({"name": game.name}, {"$set": game})
             .then((doc) => {
                 if (!doc) {
                     callback(false, undefined);
                     throw 'Unable to update';
                 }
-                this.db.get('games').findOne({game: game.name}).then((doc) => {
+                this.db.get('games').findOne({name: game.name}).then((doc) => {
                     if (!doc) {
                         callback(false, undefined);
                         throw 'Unable to find';
                     }
                     callback(true, doc);
                 }).catch((err) => {
+                    console.error(err);
                     callback(false, undefined);
                     throw err;
                 });
             }).catch((err) => {
+                console.error(err);
                 callback(false, undefined);
                 throw err;
             });

@@ -8,6 +8,14 @@ export type BOARDGAME = {
     boardgameGeekLink?: string,
 }
 
+export type BOARDGAME_NO_NAME = {
+    name?: string,
+    minPlayers?: number,
+    maxPlayers?: number,
+    boxArt?: string,
+    boardgameGeekLink?: string,
+}
+
 export type BOARDGAME_SERVER_STATE = {
     games?: List<BOARDGAME>,
     game?: BOARDGAME | string,

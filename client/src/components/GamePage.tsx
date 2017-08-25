@@ -2,13 +2,14 @@ import { BOARDGAME, BoardgameServerState } from '../redux/state';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { BOARDGAME_SERVER_ACTION, fetchGame } from '../redux/actions';
-
+import { BOARDGAME_SERVER_ACTION, fetchGame, setEditModeAction } from '../redux/actions';
+import { GameMode } from '../redux/constants';
 import { GameContainer } from './Game';
 
 interface GameConnectedDispatch {
     match?: any,
-    loadGame?: (game: string) => void;
+    loadGame?: (game: string) => void,
+    editAction: (edit: boolean) => void
 }
 
 type EDITMODE = {
@@ -23,10 +24,11 @@ export class GamePage extends React.PureComponent<BOARDGAME & GameConnectedDispa
         if (this.props.loadGame) {
             this.props.loadGame(this.props.match.params.name);
         }
+        this.props.editAction(false);
     }
 
     render(): JSX.Element {
-        return this.props ? <GameContainer  {...this.props }  /> : <span>Loading...</span>;
+        return this.props ? <GameContainer  {...this.props } gameMode={GameMode.EDIT} /> : <span>Loading...</span>;
     }
 }
 
@@ -41,6 +43,9 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION>): GameCo
     return {
         loadGame: (game: string) => {
             dispatch(fetchGame(game));
+        },
+        editAction: (edit: boolean) => {
+            dispatch(setEditModeAction(edit));
         }
     }
 }

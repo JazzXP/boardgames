@@ -2,7 +2,8 @@ import {
     FetchGameAction,
     SET_EDIT_MODE,
     SET_BOARDGAME_STATE,
-    GameEdit
+    GameEdit,
+    LoginActions
 } from './constants';
 import {
     FetchGame,
@@ -25,6 +26,12 @@ import {
     UpdateBoardgameGeekLinkNoSave
  } from './gameEditActionTypes'
 
+import {
+    LoginUpdateUsernameAction,
+    LoginUpdatePasswordAction,
+    LoginDoLoginActionSuccess
+} from './loginActionTypes'
+
 import { List, fromJS } from 'immutable';
 import { BoardgameServerState, INITIAL_STATE, BOARDGAME } from './state';
 
@@ -41,7 +48,10 @@ type AllActions =   FetchGameSuccess |
                     UpdateMinPlayersNoSave |
                     UpdateMaxPlayersNoSave |
                     UpdateBoxArtNoSave |
-                    UpdateBoardgameGeekLinkNoSave;
+                    UpdateBoardgameGeekLinkNoSave |
+                    LoginUpdateUsernameAction |
+                    LoginUpdatePasswordAction |
+                    LoginDoLoginActionSuccess;
 
 export function setEntries(state: BoardgameServerState, entries: List<BOARDGAME> | Array<BOARDGAME>): BoardgameServerState {
     return state.set('games', List(entries))
@@ -130,6 +140,13 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
             const newGame = game.merge({boardgameGeekLink: action.boardgameGeekLink});
             return newState.merge({game:newGame});
         }
+        case LoginActions.UPDATE_USERNAME:
+            return newState.merge({username: action.username});
+        case LoginActions.UPDATE_PASSWORD:
+            return newState.merge({password: action.password});
+        case LoginActions.DO_LOGIN_SUCCESS:
+            console.log(action.payload);
+            return newState;
     }
     return newState;
 }

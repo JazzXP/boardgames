@@ -35,3 +35,10 @@ export enum GameMode {
     NEW,
     EDIT
 }
+
+export enum LoginActions {
+    UPDATE_USERNAME = 'LOGIN_UPDATE_USERNAME',
+    UPDATE_PASSWORD = 'LOGIN_UPDATE_PASSWORD',
+    DO_LOGIN = 'LOGIN_DO_LOGIN',
+    DO_LOGIN_SUCCESS = 'LOGIN_DO_LOGIN_SUCCESS'
+}

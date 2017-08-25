@@ -5,6 +5,7 @@ import { Dispatch } from 'redux';
 import { Link } from 'react-router-dom';
 import { BOARDGAME, BoardgameServerState } from '../redux/state';
 import { BOARDGAME_SERVER_ACTION, fetchGames } from '../redux/actions';
+import { LoginContainer } from './Login';
 
 export interface GamesListProps {
     games: List<string>
@@ -35,6 +36,7 @@ export class GamesList extends React.Component<GamesListProps & GamesListConnect
                 <li key={game}><Link to={`/games/${game}`}>{game}</Link></li>
             )}
             </ul>
+            <LoginContainer />
             <Link to="/addGame">Add Game</Link>
         </div>;
     }

@@ -4,6 +4,8 @@ import { BOARDGAME, BOARDGAME_UPDATE } from '../../state';
 import { Router, Request, Response, NextFunction } from 'express';
 import { List } from 'immutable';
 import container from '../../config/ioc_config';
+import * as passport from 'passport';
+import { Strategy } from 'passport-local';
 
 export class GamesRouter {
     router: Router
@@ -11,6 +13,9 @@ export class GamesRouter {
     constructor() {
         this.router = Router();
         this.init();
+        passport.use(new Strategy((username, password, done) => {
+            return done(null, username, {message: 'Invalid User'});
+        }));
     }
 
     public getAll(req: Request, res: Response, next: NextFunction) {
@@ -107,6 +112,10 @@ export class GamesRouter {
         this.router.get('/:id', this.getOne);
         this.router.post('/:id/update', this.updateOne);
         this.router.post('/:id/add', this.addOne);
+        this.router.post('/login', passport.authenticate('local', { 
+            successRedirect: '/',
+            failureRedirect: '/'
+        }));
     }
 }
 

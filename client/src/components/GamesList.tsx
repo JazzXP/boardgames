@@ -18,10 +18,9 @@ export interface GamesListConnectedDispatch {
 
 export interface GamesListState {}
 
-const defaultArr: List<string> = List();
 export class GamesList extends React.Component<GamesListProps & GamesListConnectedDispatch, GamesListState> {
     getList(): List<string> {
-        return this.props.games || defaultArr;
+        return this.props.games;
     }
 
     componentWillMount() {

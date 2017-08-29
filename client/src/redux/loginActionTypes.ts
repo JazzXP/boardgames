@@ -22,3 +22,8 @@ export type LoginDoLoginActionSuccess = {
     type: LoginActions.DO_LOGIN_SUCCESS,
     payload: AxiosResponse
 }
+
+export type LoginDoLogoutActionSuccess = {
+    type: LoginActions.DO_LOGOUT_SUCCESS,
+    payload: AxiosResponse
+}

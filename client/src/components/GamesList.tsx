@@ -8,7 +8,8 @@ import { BOARDGAME_SERVER_ACTION, fetchGames } from '../redux/actions';
 import { LoginContainer } from './Login';
 
 export interface GamesListProps {
-    games: List<string>
+    games: List<string>,
+    loggedIn?: boolean
 }
 
 export interface GamesListConnectedDispatch {
@@ -36,7 +37,7 @@ export class GamesList extends React.Component<GamesListProps & GamesListConnect
             )}
             </ul>
             <LoginContainer />
-            <Link to="/addGame">Add Game</Link>
+            {this.props.loggedIn ? <Link to="/addGame">Add Game</Link> : ""}
         </div>;
     }
 }
@@ -44,7 +45,8 @@ export class GamesList extends React.Component<GamesListProps & GamesListConnect
 
 function mapStateToProps(state: BoardgameServerState, ownProps: GamesListProps) {
     return {
-        games: state.get('games').map((game: BOARDGAME) => { return game.name })
+        games: state.get('games').map((game: BOARDGAME) => { return game.name }),
+        loggedIn: state.get('loggedIn')
     }
 }
 

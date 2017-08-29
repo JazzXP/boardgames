@@ -22,10 +22,11 @@ export type BOARDGAME_SERVER_STATE = {
     payload?: any,
     editMode?: boolean,
     username?: string,
-    password?: string
+    password?: string,
+    loggedIn?: boolean
 }
 
-export class BoardgameServerState extends Record({games: List<BOARDGAME>(), game: undefined, state: undefined, editMode: false, username: undefined, password: undefined} as BOARDGAME_SERVER_STATE) {
+export class BoardgameServerState extends Record({games: List<BOARDGAME>(), game: undefined, state: undefined, editMode: false, username: undefined, password: undefined, loggedIn: undefined} as BOARDGAME_SERVER_STATE) {
     public toJS(): any {
         return JSON.parse(JSON.stringify(super.toJS()));
     }

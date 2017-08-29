@@ -20,6 +20,7 @@ import { BOARDGAME, BoardgameServerState, BOARDGAME_SERVER_STATE } from '../redu
 import { DisplayField } from './DisplayField';
 import { DisplayImageField } from './DisplayImageField';
 import { DisplayURLField } from './DisplayURLField';
+import { EditButton } from './EditButton';
 import { GameMode } from '../redux/constants';
 
 
@@ -31,7 +32,8 @@ export interface GameProps {
     boardgameGeekLink?: string,
     editMode: boolean,
     game?: BoardgameServerState,
-    gameMode?: GameMode
+    gameMode?: GameMode,
+    loggedIn?: boolean
 }
 
 export interface GamesConnectedDispatch {
@@ -65,7 +67,7 @@ export class Game extends React.Component<GameProps & GamesConnectedDispatch, Ga
             <DisplayField label="Max Players:" fieldVal={'' + this.props.maxPlayers} editMode={this.props.editMode} onBlur={this.props.updateMaxPlayersAction} /><br />
             <DisplayImageField label="Box Art:" imageURL={this.props.boxArt} editMode={this.props.editMode} onBlur={this.props.updateBoxArtAction} /><br />
             <DisplayURLField label="Boardgame Geek Link:" url={this.props.boardgameGeekLink} editMode={this.props.editMode} onBlur={this.props.updateBBGLinkAction} /><br />
-            <button onClick={ () => { if (this.props.editClickAction) { this.props.editClickAction(!this.props.editMode, game); } }}>{this.props.editMode ? "Done" : "Edit"}</button><br />
+            {this.props.loggedIn ? <EditButton editMode={this.props.editMode} clickAction={this.props.editClickAction} labelDone="Done" labelEdit="Edit" game={game} /> : "" }
             <Link to="/">Back to Main</Link>
         </div>;
     }
@@ -80,7 +82,8 @@ function mapStateToProps(state: BoardgameServerState, ownProps: GameProps): Game
         boxArt: game ? game.get('boxArt') : undefined,
         boardgameGeekLink: game ? game.get('boardgameGeekLink') : undefined,
         editMode: state ? state.get('editMode') : false,
-        gameMode: ownProps.gameMode
+        gameMode: ownProps.gameMode,
+        loggedIn: state.get('loggedIn')
     } 
     return gameProps;
 }

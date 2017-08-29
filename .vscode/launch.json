@@ -7,6 +7,24 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/server/dist/src/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch via NPM",
+            "runtimeExecutable": "npm.cmd",
+            "cwd": "${workspaceRoot}/server",
+            "runtimeArgs": [
+                "--inspect-brk",
+                "start"
+            ],
+            "port": 9229
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Test Server via NPM",
             "cwd": "${workspaceRoot}/server/",
             "runtimeExecutable": "npm",

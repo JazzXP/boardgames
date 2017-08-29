@@ -7,7 +7,7 @@ import axios from 'axios'
 import axiosMiddleware from 'redux-axios-middleware';
 
 import reducer from './redux/reducer';
-import gameEditReducer from './redux/gameEditReducer';
+//import gameEditReducer from './redux/gameEditReducer';
 import { BoardgameServerState } from './redux/state'
 import { GamesListContainer } from './components/GamesList';
 import { GamePageContainer } from './components/GamePage';

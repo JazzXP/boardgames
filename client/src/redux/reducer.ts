@@ -29,7 +29,8 @@ import {
 import {
     LoginUpdateUsernameAction,
     LoginUpdatePasswordAction,
-    LoginDoLoginActionSuccess
+    LoginDoLoginActionSuccess,
+    LoginDoLogoutActionSuccess
 } from './loginActionTypes'
 
 import { List, fromJS } from 'immutable';
@@ -51,7 +52,8 @@ type AllActions =   FetchGameSuccess |
                     UpdateBoardgameGeekLinkNoSave |
                     LoginUpdateUsernameAction |
                     LoginUpdatePasswordAction |
-                    LoginDoLoginActionSuccess;
+                    LoginDoLoginActionSuccess |
+                    LoginDoLogoutActionSuccess;
 
 export function setEntries(state: BoardgameServerState, entries: List<BOARDGAME> | Array<BOARDGAME>): BoardgameServerState {
     return state.set('games', List(entries))
@@ -145,8 +147,11 @@ export default function reducer(state: BoardgameServerState = INITIAL_STATE, act
         case LoginActions.UPDATE_PASSWORD:
             return newState.merge({password: action.password});
         case LoginActions.DO_LOGIN_SUCCESS:
-            console.log(action.payload);
-            return newState;
+        console.log(action.payload.data);
+            return newState.merge({loggedIn: action.payload.data.loggedIn});
+        case LoginActions.DO_LOGOUT_SUCCESS:
+        console.log(action.payload.data);
+            return newState.merge({loggedIn: action.payload.data.loggedIn});
     }
     return newState;
 }

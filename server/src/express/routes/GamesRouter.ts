@@ -102,11 +102,19 @@ export class GamesRouter {
         });
     }
 
+    checkSignedIn(req: Request, res: Response, next: NextFunction) {
+        if (req.session && req.session.passport && req.session.passport.user) {
+            next();
+            return;
+        }
+        next('Not signed in');
+    }
+
     init() {
         this.router.get('/', this.getAll);
         this.router.get('/:id', this.getOne);
-        this.router.post('/:id/update', this.updateOne);
-        this.router.post('/:id/add', this.addOne);
+        this.router.post('/:id/update', this.checkSignedIn, this.updateOne);
+        this.router.post('/:id/add', this.checkSignedIn, this.addOne);
     }
 }
 

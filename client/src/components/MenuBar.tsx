@@ -15,7 +15,7 @@ export class MenuBar extends React.PureComponent<MenuBarProps, {}> {
             <MenuLogin ref="left" alignment="left">
                 <LoginContainer />
             </MenuLogin>
-            <button onClick={(e) => this.showLogin()}>Login</button>
+            <button onClick={(e) => this.showLogin()}>Menu</button>
         </div>;
     }
 }

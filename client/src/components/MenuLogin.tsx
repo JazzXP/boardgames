@@ -16,11 +16,9 @@ export class MenuLogin extends React.PureComponent<MenuLoginProps, MenuLoginStat
 
     show() {
         this.setState({visible: true});
-//        document.addEventListener('click', this.hide.bind(this));
     }
 
     hide() {
-        //document.removeEventListener('click', this.hide.bind(this));
         this.setState({visible: false});
     }
 

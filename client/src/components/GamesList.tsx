@@ -36,7 +36,6 @@ export class GamesList extends React.Component<GamesListProps & GamesListConnect
                 <li key={game}><Link to={`/games/${game}`}>{game}</Link></li>
             )}
             </ul>
-            <LoginContainer />
             {this.props.loggedIn ? <Link to="/addGame">Add Game</Link> : ""}
         </div>;
     }

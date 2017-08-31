@@ -1,0 +1,25 @@
+$menuWidth: 270px;
+
+.menuBar {
+    .menuLogin {
+        position: fixed;
+        width: $menuWidth;
+        transform: translateX(-100%);        
+        .visible {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .invisible {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .left {
+            left: 0;
+            background: #fff;
+            border: 1px solid black;
+            padding: 10px;
+            box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.5);
+        }
+    }
+
+}

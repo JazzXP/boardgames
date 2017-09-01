@@ -5,6 +5,7 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
+import * as mongoSanitize from 'express-mongo-sanitize';
 
 import GamesRouter from './routes/GamesRouter';
 import AuthenticationRouter from './routes/AuthenticationRouter';
@@ -25,11 +26,19 @@ class App {
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));
+        this.express.use(mongoSanitize());
         this.express.use(cookieParser());
+        this.express.set('trust proxy', 1); // For running behind a reverse proxy
         this.express.use(session({
             secret: 'blahblahblah',
+            name: 'sessionId',
             resave: false,
-            saveUninitialized: true
+            saveUninitialized: true,
+            cookie: {
+                httpOnly: true
+                //secure: true,
+                //domain: 'test.com'
+            }
         }));
         this.express.use(passport.initialize());
         this.express.use(flash());

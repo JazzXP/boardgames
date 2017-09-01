@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as styles from '../styles/MenuBar.scss';
 
 export interface MenuLoginProps {
     alignment: string
@@ -23,8 +24,8 @@ export class MenuLogin extends React.PureComponent<MenuLoginProps, MenuLoginStat
     }
 
     render() {
-        return <div className="menuLogin">
-            <div className={(this.state.visible ? "visible " : "invisible ") + this.props.alignment}>
+        return <div className={styles.menuLogin}>
+            <div className={(this.state.visible ? styles.visible : styles.invisible) + ' ' + (styles as any)[this.props.alignment]}>
                 {this.props.children}
                 <button onClick={() => this.hide()}>Hide</button>
             </div>

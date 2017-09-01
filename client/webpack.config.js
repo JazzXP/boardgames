@@ -8,14 +8,19 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
+    
     module: {
         rules: [
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader", exclude: /\.scss.d.ts$/},
             { test: /\.scss$/, 
                 use: [{
                     loader: "style-loader"
                 },{
-                    loader: "css-loader"
+                    loader: "typings-for-css-modules-loader",
+                    options: {
+                        modules: true,
+                        namedExport: true
+                    }
                 },{
                     loader: "sass-loader"
                 }]

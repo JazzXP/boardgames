@@ -1,4 +1,5 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var webpack = require('webpack');
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -37,13 +38,17 @@ module.exports = {
     },
     externals: {
         "react": "React",
-        "react-dom": "ReactDOM"
+        "react-dom": "ReactDOM",
+        "axios": "axios"
     },
     devServer: {
         hot: true,
         inline: true
     },
     plugins: [
-        new ExtractTextPlugin('styles.css')
+        new ExtractTextPlugin('styles.css'),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: true          
+        })
     ]
 }

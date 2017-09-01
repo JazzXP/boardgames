@@ -1,3 +1,4 @@
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     entry: "./src/index.tsx",
     output: {
@@ -8,24 +9,30 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
-    
     module: {
-        rules: [
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader", exclude: /\.scss.d.ts$/},
-            { test: /\.scss$/, 
-                use: [{
-                    loader: "style-loader"
-                },{
-                    loader: "typings-for-css-modules-loader",
-                    options: {
-                        modules: true,
-                        namedExport: true
-                    }
-                },{
-                    loader: "sass-loader"
-                }]
-            },
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+        rules: [ { 
+                test: /\.tsx?$/, 
+                loader: "awesome-typescript-loader", 
+                exclude: /\.scss.d.ts$/
+            }, { 
+                test: /\.scss$/, 
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: "typings-for-css-modules-loader",
+                        options: {
+                            modules: true,
+                            namedExport: true
+                        }
+                    },{
+                        loader: "sass-loader"
+                    }]
+                })
+            }, {
+                test: /\.js$/, 
+                enforce: "pre", 
+                loader: "source-map-loader" 
+            }
         ]
     },
     externals: {
@@ -35,5 +42,8 @@ module.exports = {
     devServer: {
         hot: true,
         inline: true
-    }
+    },
+    plugins: [
+        new ExtractTextPlugin('styles.css')
+    ]
 }

@@ -6,6 +6,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';
 import * as mongoSanitize from 'express-mongo-sanitize';
+import * as helmet from 'helmet';
 
 import GamesRouter from './routes/GamesRouter';
 import AuthenticationRouter from './routes/AuthenticationRouter';
@@ -23,6 +24,9 @@ class App {
     }
 
     private middleware(): void {
+        this.express.use(helmet({
+            hsts: false
+        }))
         this.express.use(logger('dev'));
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: false }));

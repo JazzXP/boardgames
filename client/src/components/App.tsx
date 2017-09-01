@@ -15,7 +15,7 @@ import reducer from '../redux/reducer';
 import { BoardgameServerState } from '../redux/state'
 
 
-export class App extends React.Component<{}, {}> {
+export class App extends React.Component<{className: string}, {}> {
     public store: Store<BoardgameServerState>;
     public client: AxiosInstance;
     
@@ -33,7 +33,7 @@ export class App extends React.Component<{}, {}> {
 
     render() {
         const routes = 
-        <div>
+        <div className={this.props.className}>
             <MenuBar ref="left" alignment="left">
             </MenuBar>
             <Route exact path="/" component={GamesListContainer} />

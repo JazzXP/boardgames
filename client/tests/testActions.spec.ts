@@ -2,6 +2,8 @@ import * as Action from '../src/redux/actions';
 import { FetchGameAction, SET_EDIT_MODE, SET_BOARDGAME_STATE } from '../src/redux/constants';
 import { expect } from 'chai';
 import { suite, test } from 'mocha-typescript'
+import { Boardgame, BoardgameServerState } from '../src/redux/state';
+import * as Immutable from 'immutable';
 
 @suite('Tests Actions')
 class TestActions {
@@ -53,8 +55,8 @@ class TestActions {
             game: {
                 name: "Blah"
             }
-        }
-        const val = Action.setBoardgameState({name: "Blah"});
-        expect(val).to.deep.equal(successVal);
+        };
+        const val = Action.setBoardgameState(new Boardgame({name: "Blah"}));
+        expect(Immutable.fromJS(val).toJS()).to.deep.equal(successVal);
     }
 }

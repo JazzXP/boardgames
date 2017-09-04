@@ -15,7 +15,7 @@ class TestGame {
         const store: Store<Map<any, any>> = createStore((state, action) => { return Map({}); });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GamesList games={List(['Test1', 'Test2'])} /></BrowserRouter></Provider>);
         expect(wrapper.find('li').length).to.equal(2);
-        expect(wrapper.find('Link').length).to.equal(3); // One each for the <li> and then the Login component
+        expect(wrapper.find('Link').length).to.equal(2);
         expect(wrapper.find('ul').childAt(0).text()).to.equal('Test1');
         expect(wrapper.find('ul').childAt(1).text()).to.equal('Test2');
     }

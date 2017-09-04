@@ -35,7 +35,7 @@ class TestDatabase {
         const db = new DB();
         const dummyName = 'BlahBlahBlah';
         try {
-            db.updateGame({
+            db.addGame({
                 name: dummyName,
                 minPlayers: 1,
                 maxPlayers: 5
@@ -49,6 +49,9 @@ class TestDatabase {
         catch (err) {
             console.log(err);
             done();
+        }
+        finally {
+            db.removeGame(dummyName);
         }
     }
 }

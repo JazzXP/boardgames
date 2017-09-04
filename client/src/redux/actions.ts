@@ -1,6 +1,6 @@
 import { List, Map } from 'immutable';
 import { FetchGameAction, SET_EDIT_MODE, SET_BOARDGAME_STATE } from './constants';
-import { BOARDGAME_SERVER_STATE, BOARDGAME, BoardgameServerState } from './state';
+import { BOARDGAME_SERVER_STATE, Boardgame, BoardgameServerState } from './state';
 
 type _BOARDGAME_SERVER_ACTION = {
     type: FetchGameAction.FETCH_GAME | SET_EDIT_MODE | SET_BOARDGAME_STATE | '';
@@ -39,7 +39,7 @@ export function setEditModeAction(editMode: boolean): BOARDGAME_SERVER_ACTION {
     }
 }
 
-export function setBoardgameState(game: BOARDGAME): BOARDGAME_SERVER_ACTION {
+export function setBoardgameState(game: Boardgame): BOARDGAME_SERVER_ACTION {
     return {
         type: SET_BOARDGAME_STATE,
         game: game

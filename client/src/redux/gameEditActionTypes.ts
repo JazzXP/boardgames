@@ -3,6 +3,11 @@ import { GameEdit } from './constants';
 import { List } from 'immutable';
 import { AxiosResponse } from 'axios';
 
+export type GameEditNameAction = {
+    type: GameEdit.GAME_EDIT_NAME,
+    name: string
+}
+
 export type GameEditMinPlayersAction = {
     type: GameEdit.GAME_EDIT_MIN_PLAYERS,
     minPlayers: number

@@ -27,15 +27,18 @@ export class DB implements IDB {
         this.db.get('games').findOneAndUpdate({"name": game.name}, {"$set": game})
             .then((doc) => {
                 if (!doc) {
+                    console.error('Unable to update');
                     callback(false, undefined);
                     throw 'Unable to update';
                 }
-                this.db.get('games').findOne({name: game.name}).then((doc) => {
+                this.db.get('games').findOne({name: game.name}, {_id: false}).then((doc) => {
                     if (!doc) {
+                        console.error('Unable to find');
                         callback(false, undefined);
                         throw 'Unable to find';
                     }
-                    callback(true, doc);
+
+                    callback(true, this.stripNull(doc));
                 }).catch((err) => {
                     console.error(err);
                     callback(false, undefined);
@@ -55,7 +58,7 @@ export class DB implements IDB {
     getGame(game: string, callback: (game: BOARDGAME) => void): void {
         this.db.get('games').findOne({"name": game}, {_id: false})
             .then((doc) => {
-                callback(doc);
+                callback(this.stripNull(doc));
             });
     }
 
@@ -67,5 +70,13 @@ export class DB implements IDB {
                     return item.name;
                 })));
             });
+    }
+
+    stripNull(doc: any): any {
+        for (let val in doc) {
+            if (doc[val] === null)
+                doc[val] = undefined;
+        }
+        return JSON.parse(JSON.stringify(doc));
     }
 }

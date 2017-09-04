@@ -5,15 +5,19 @@ import { AddGamePageContainer } from './AddGame';
 import { MenuBar } from './MenuBar';
 import { Route, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore, Store } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
 import axios from 'axios'
 import { AxiosInstance } from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
 
-import reducer from '../redux/reducer';
 //import gameEditReducer from './redux/gameEditReducer';
-import { BoardgameServerState } from '../redux/state'
-
+import { combineReducers } from 'redux-immutable';
+import loginReducer from '../redux/loginReducer'
+import gameEditReducer from '../redux/gameEditReducer';
+import gamesReducer from '../redux/gamesReducer';
+import editModeReducer from '../redux/editModeReducer';
+import { BoardgameServerState } from '../redux/state';
+import { SET_EDIT_MODE } from '../redux/constants';
 
 export class App extends React.Component<{className: string}, {}> {
     public store: Store<BoardgameServerState>;
@@ -26,7 +30,14 @@ export class App extends React.Component<{className: string}, {}> {
             responseType: 'json'
         });
         this.store= createStore(
-            reducer, 
+            combineReducers(
+                {
+                    editMode: editModeReducer,
+                    loggedIn: loginReducer,
+                    game: gameEditReducer,
+                    games: gamesReducer
+                }
+            ),
             applyMiddleware(axiosMiddleware(this.client))
         ) as Store<BoardgameServerState>;
     }

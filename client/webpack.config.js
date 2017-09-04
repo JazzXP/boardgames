@@ -46,9 +46,9 @@ module.exports = {
         inline: true
     },
     plugins: [
-        new ExtractTextPlugin('styles.css'),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: true          
-        })
+        new ExtractTextPlugin('styles.css')
+        // new webpack.optimize.UglifyJsPlugin({
+        //     mangle: true          
+        // })
     ]
 }

@@ -35,6 +35,22 @@ class TestGame {
         input.simulate('blur');
     }
 
+    @test('click edit')
+    testClickEdit(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type==='SET_EDIT_MODE') {
+                expect(action.editMode).to.be.true;
+                done();
+            }
+
+            return Map({"loggedIn": true, "editMode":false}); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={false} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('button').at(0);
+        input.simulate('click');
+    }
+
     @test('update min players field')
     testUpdateMinPlayersField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer

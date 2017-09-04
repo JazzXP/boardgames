@@ -12,8 +12,8 @@ export interface LoginProps {
 }
 
 export interface LoginConnectedDispatch {
-    loginClickAction: (username: string, password: string) => void;
-    logoutClickAction: () => void;
+    loginClickAction?: (username: string, password: string) => void;
+    logoutClickAction?: () => void;
 }
 
 export interface LoginState {
@@ -34,10 +34,10 @@ export class Login extends React.Component<LoginProps & LoginConnectedDispatch, 
         <div className={styles.login}>
             <label>Username:</label><input onChange={(e) => this.setState({username: e.currentTarget.value})} /><br />
             <label>Password:</label><input type="password" onChange={(e) => this.setState({password: e.currentTarget.value})}  /><br />
-            <button onClick={()=>{this.props.loginClickAction(this.state.username!, this.state.password!)}}>Login</button>
+            <button onClick={()=>{this.props.loginClickAction && this.props.loginClickAction(this.state.username!, this.state.password!)}}>Login</button>
         </div> :
         <div>
-            <button onClick={()=>{this.props.logoutClickAction()}}>Logout</button>
+            <button onClick={()=>{this.props.logoutClickAction && this.props.logoutClickAction()}}>Logout</button>
         </div>;
     }
 }

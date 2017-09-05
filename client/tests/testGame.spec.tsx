@@ -7,6 +7,8 @@ import { mount, render, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore, Store } from 'redux';
 import { List, Map } from 'immutable'
+import * as Immutable from 'immutable'
+import { BoardgameServerState } from '../src/redux/state';
 
 @suite('Tests Game Field')
 class TestGame {
@@ -51,6 +53,54 @@ class TestGame {
         input.simulate('click');
     }
 
+    @test('click done')
+    testClickDone(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type==='SET_EDIT_MODE') {
+                expect(action.editMode).to.be.false;
+                done();
+            }
+
+            return Map({"loggedIn": true, "editMode":true}); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('button').at(0);
+        input.simulate('click');
+    }
+
+    @test('click edit in new mode')
+    testClickEditInNew(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type==='GAME_EDIT_SAVE_NEW') {
+                expect(action.payload).to.not.be.undefined;
+                done();
+            }
+
+            return Map({"loggedIn": true, "editMode":false}); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={false} gameMode={0} /></BrowserRouter></Provider>);
+        const input = wrapper.find('button').at(0);
+        input.simulate('click');
+    }
+
+    @test('click done in new mode')
+    testClickDoneInNew(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type==='GAME_EDIT_SAVE_NEW') {
+                expect(action.payload).to.not.be.undefined;
+                done();
+            }
+
+            return Map({"loggedIn": true, "editMode":true}); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={0} /></BrowserRouter></Provider>);
+        const input = wrapper.find('button').at(0);
+        input.simulate('click');
+    }
+
     @test('update min players field')
     testUpdateMinPlayersField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
@@ -64,6 +114,27 @@ class TestGame {
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
         const input = wrapper.find('input').at(0);
         (input.getNode() as any).value = 2;
+        input.simulate('blur');
+    }
+
+    @test('clear min players field returns undefined')
+    testClearMinPlayersField(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type == 'GAME_EDIT_MIN_PLAYERS') {
+                expect(action.payload.request.data.minPlayers).is.undefined;
+                done();
+            }
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(0);
+        (input.getNode() as any).value = '';
         input.simulate('blur');
     }
 
@@ -87,14 +158,35 @@ class TestGame {
     testClearMaxPlayersField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
         const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type == 'GAME_EDIT_MAX_PLAYERS') {
+                expect(action.payload.request.data.maxPlayers).is.undefined;
+                done();
+            }
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(1);
+        (input.getNode() as any).value = '';
+        input.simulate('blur');
+    }
+
+    @test('clear max players field returns undefined in new')
+    testClearMaxPlayersFieldInNew(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
             if (action.type == 'GAME_EDIT_UPDATE_MAX_PLAYERS_NO_SAVE') {
                 expect(action.maxPlayers).is.undefined;
                 done();
             }
             return Map({"editMode":true}); 
         });
-        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(1);
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={0} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(2);
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -119,14 +211,40 @@ class TestGame {
     testClearImageField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
         const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type == 'GAME_EDIT_BOX_ART') {
+                expect(action.payload.request.data.boxArt).is.undefined;
+                done();
+            }
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(2);
+        (input.getNode() as any).value = '';
+        input.simulate('blur');
+    }
+
+    @test('clear box art field returns undefined in new mode')
+    testClearImageFieldInNew(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
             if (action.type == 'GAME_EDIT_UPDATE_BOX_ART_NO_SAVE') {
                 expect(action.boxArt).is.undefined;
                 done();
             }
-            return Map({"editMode":true}); 
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
         });
-        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(2);
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={0} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(3);
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -151,14 +269,40 @@ class TestGame {
     testClearBoardgameGeekField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
         const store: Store<Map<any, any>> = createStore((state, action) => { 
+            if (action.type == 'GAME_EDIT_BBG_LINK') {
+                expect(action.payload.request.data.boardgameGeekLink).is.undefined;
+                done();
+            }
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(3);
+        (input.getNode() as any).value = '';
+        input.simulate('blur');
+    }
+
+    @test('clear boardgame geek field returns undefined in new mode')
+    testClearBoardgameGeekFieldInNew(done: ()=>void) {
+        // Because this is async, we have to validate in the reducer
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
             if (action.type == 'GAME_EDIT_UPDATE_BBG_LINK_NO_SAVE') {
                 expect(action.boardgameGeekLink).is.undefined;
                 done();
             }
-            return Map({"editMode":true}); 
+            return Immutable.fromJS({
+                "editMode":true,
+                "game": {
+                    name: 'TestGame'
+                }
+            }); 
         });
-        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(3);
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={0} /></BrowserRouter></Provider>);
+        const input = wrapper.find('input').at(4);
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }

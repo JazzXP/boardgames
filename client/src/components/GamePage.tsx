@@ -9,7 +9,7 @@ import { GameContainer } from './Game';
 interface GameConnectedDispatch {
     match?: any,
     loadGame?: (game: string) => void,
-    editAction: (edit: boolean) => void
+    editAction?: (edit: boolean) => void
 }
 
 type EDITMODE = {
@@ -24,18 +24,19 @@ export class GamePage extends React.PureComponent<BOARDGAME & GameConnectedDispa
         if (this.props.loadGame) {
             this.props.loadGame(this.props.match.params.name);
         }
-        this.props.editAction(false);
+        if (this.props.editAction)
+            this.props.editAction(false);
     }
 
     render(): JSX.Element {
-        return this.props ? <GameContainer  {...this.props } gameMode={GameMode.EDIT} /> : <span>Loading...</span>;
+        return <GameContainer  {...this.props } gameMode={GameMode.EDIT} />;
     }
 }
 
 function mapStateToProps(state: BoardgameServerState, ownProps: BOARDGAME & EDITMODE) {
     return {
         game: state.get('game'),
-        editMode: state ? state.get('editMode') : false
+        editMode: state.get('editMode')
     }
 }
 

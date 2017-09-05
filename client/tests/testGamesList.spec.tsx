@@ -20,6 +20,23 @@ class TestGame {
         expect(wrapper.find('ul').childAt(1).text()).to.equal('Test2');
     }
 
+    @test('Page Renders correct data when logged in')
+    testGamesListRendersItemsWhenLoggedIn() {
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+            return Map({
+                "loggedIn": true,
+                "games": List([
+                    {name: 'Test1'},
+                    {name: 'Test2'}])
+            }); 
+        });
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GamesListContainer games={List(['Test1', 'Test2'])} /></BrowserRouter></Provider>);
+        expect(wrapper.find('li').length).to.equal(2);
+        expect(wrapper.find('Link').length).to.equal(3);
+        expect(wrapper.find('ul').childAt(0).text()).to.equal('Test1');
+        expect(wrapper.find('ul').childAt(1).text()).to.equal('Test2');
+    }
+
     @test('Page mount calls list function')
     testGamesListMountCallsListFunction(done: () => void) {
         const validateMountLoadData = () => {

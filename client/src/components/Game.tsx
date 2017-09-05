@@ -81,7 +81,7 @@ function mapStateToProps(state: BoardgameServerState, ownProps: GameProps): Game
         maxPlayers: game ? game.get('maxPlayers') : undefined,
         boxArt: game ? game.get('boxArt') : undefined,
         boardgameGeekLink: game ? game.get('boardgameGeekLink') : undefined,
-        editMode: state ? state.get('editMode') : false,
+        editMode: state.get('editMode'),
         gameMode: ownProps.gameMode,
         loggedIn: state.get('loggedIn')
     } 
@@ -99,9 +99,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
             }
         },
         updateNameAction: (e: React.SyntheticEvent<HTMLFormElement>): void => {
-            if (ownProps.gameMode == GameMode.NEW) {
-                dispatch(updateNameNoSave(e.currentTarget.value));
-            }
+            dispatch(updateNameNoSave(e.currentTarget.value)); // Can only be called when GameMode.NEW
         },
         updateMinPlayersAction: (e: React.FormEvent<HTMLInputElement>): void => {
             if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {

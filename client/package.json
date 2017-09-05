@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --color",
     "test": "mocha --colors -r ts-node/register -r ignore-styles --require ./tests/test_helper.ts tests/**/*.spec.ts tests/**/*.spec.tsx",
-    "coverage": "nyc npm test",
+    "coverage": "nyc --all npm test",
     "build": "npm test && webpack"
   },
   "author": "Sam Dickinson",

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { BoardgameServerState } from '../redux/state';
 import { BOARDGAME_SERVER_ACTION } from '../redux/actions';
-import { updateLoginUsernameAction, updateLoginPasswordAction, doLogin, doLogout } from '../redux/loginActions';
+import { doLogin, doLogout } from '../redux/loginActions';
 
 export interface LoginProps {
     loggedIn?: boolean

@@ -3,13 +3,15 @@ import {
     setGameMinPlayersAction, 
     setGameMaxPlayersAction, 
     setGameBoxArtAction, 
-    setGameBBGLinkAction ,
+    setGameBBGLinkAction,
+    setGamePlayTimeAction,
     saveNewGame,
     updateNameNoSave,
     updateMinPlayersNoSave,
     updateMaxPlayersNoSave,
     updateBoxArtNoSave,
-    updateBoardgameGeekLinkNoSave
+    updateBoardgameGeekLinkNoSave,
+    updatePlayTimeNoSave
 } from '../redux/gameEditActions'
 import * as React from 'react';
 import { List } from 'immutable';
@@ -30,6 +32,7 @@ export interface GameProps {
     maxPlayers?: number,
     boxArt?: string,
     boardgameGeekLink?: string,
+    playTime?: string,
     editMode: boolean,
     game?: BoardgameServerState,
     gameMode?: GameMode,
@@ -43,6 +46,7 @@ export interface GamesConnectedDispatch {
     updateMaxPlayersAction?: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
     updateBoxArtAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
     updateBBGLinkAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updatePlayTimeAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
 }
 
 export interface GameState {}
@@ -59,12 +63,14 @@ export class Game extends React.Component<GameProps & GamesConnectedDispatch, Ga
             minPlayers: this.props.minPlayers,
             maxPlayers: this.props.maxPlayers,
             boxArt: this.props.boxArt,
-            boardgameGeekLink: this.props.boardgameGeekLink
+            boardgameGeekLink: this.props.boardgameGeekLink,
+            playTime: this.props.playTime
         }
         return <div className="game">
             <DisplayField label="Name:" fieldVal={this.props.name} editMode={this.props.editMode && this.props.gameMode==GameMode.NEW} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateNameAction && this.props.updateNameAction(this.props.name, e)} /><br />
             <DisplayField label="Min Players:" fieldVal={this.props.minPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMinPlayersAction && this.props.updateMinPlayersAction(this.props.minPlayers, e)} /><br />
             <DisplayField label="Max Players:" fieldVal={this.props.maxPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMaxPlayersAction && this.props.updateMaxPlayersAction(this.props.maxPlayers, e)} /><br />
+            <DisplayField label="Play Time:" fieldVal={this.props.playTime as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updatePlayTimeAction && this.props.updatePlayTimeAction(this.props.playTime, e)} /><br />
             <DisplayImageField label="Box Art:" imageURL={this.props.boxArt} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBoxArtAction && this.props.updateBoxArtAction(this.props.boxArt, e)} /><br />
             <DisplayURLField label="Boardgame Geek Link:" url={this.props.boardgameGeekLink} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBBGLinkAction && this.props.updateBBGLinkAction(this.props.boardgameGeekLink, e)} /><br />
             {this.props.loggedIn ? <EditButton editMode={this.props.editMode} clickAction={this.props.editClickAction} labelDone="Done" labelEdit="Edit" game={game} /> : "" }
@@ -79,6 +85,7 @@ function mapStateToProps(state: BoardgameServerState, ownProps: GameProps): Game
         name: game ? game.get('name') : defaultName,
         minPlayers: game ? game.get('minPlayers') : 0,
         maxPlayers: game ? game.get('maxPlayers') : undefined,
+        playTime: game ? game.get('playTime') : undefined,
         boxArt: game ? game.get('boxArt') : undefined,
         boardgameGeekLink: game ? game.get('boardgameGeekLink') : undefined,
         editMode: state.get('editMode'),
@@ -128,6 +135,23 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                     }
                     else {
                         dispatch(updateMaxPlayersNoSave(undefined));
+                    }
+                }
+            }
+        },
+        updatePlayTimeAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (e.currentTarget.value !== oldval) {
+                if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
+                    const game = ownProps.game as BoardgameServerState;
+                    let val = e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined;
+                    dispatch(setGamePlayTimeAction(game.get('name'), val));
+                }
+                else {
+                    if (e.currentTarget.value.length > 0) {
+                        dispatch(updatePlayTimeNoSave(e.currentTarget.value));
+                    }
+                    else {
+                        dispatch(updatePlayTimeNoSave(undefined));
                     }
                 }
             }

@@ -7,12 +7,14 @@ type _BOARDGAME_EDIT_ACTION = {
             GameEdit.GAME_EDIT_MAX_PLAYERS |
             GameEdit.GAME_EDIT_BOX_ART |
             GameEdit.GAME_EDIT_BBG_LINK |
+            GameEdit.GAME_EDIT_PLAY_TIME |
             GameEdit.GAME_EDIT_SAVE_NEW |
             GameEdit.UPDATE_NAME_NO_SAVE |
             GameEdit.UPDATE_MIN_PLAYERS_NO_SAVE |
             GameEdit.UPDATE_MAX_PLAYERS_NO_SAVE |
             GameEdit.UPDATE_BOX_ART_NO_SAVE |
             GameEdit.UPDATE_BBG_LINK_NO_SAVE |
+            GameEdit.UPDATE_PLAY_TIME_NO_SAVE |
             '';
     payload?: any;
 }
@@ -83,6 +85,22 @@ export function setGameBBGLinkAction(name: string, link?: string): BOARDGAME_SER
     }
 }
 
+export function setGamePlayTimeAction(name: string, playTime?: string): BOARDGAME_SERVER_ACTION {
+    return {
+        type: GameEdit.GAME_EDIT_PLAY_TIME,
+        payload: {
+            request: {
+                method: 'post',
+                url: `/games/${name}/update`,
+                data: {
+                    name: name,
+                    playTime: playTime 
+                }
+            }
+        }
+    }
+}
+
 export function saveNewGame(game: BOARDGAME_NO_NAME): BOARDGAME_SERVER_ACTION {
     return {
         type: GameEdit.GAME_EDIT_SAVE_NEW,
@@ -128,5 +146,12 @@ export function updateBoardgameGeekLinkNoSave(boardgameGeekLink: string | undefi
     return {
         type: GameEdit.UPDATE_BBG_LINK_NO_SAVE,
         boardgameGeekLink: boardgameGeekLink
+    }
+}
+
+export function updatePlayTimeNoSave(playTime: string | undefined): BOARDGAME_SERVER_ACTION {
+    return {
+        type: GameEdit.UPDATE_PLAY_TIME_NO_SAVE,
+        playTime: playTime
     }
 }

@@ -53,7 +53,8 @@ export class GamesRouter {
             minPlayers: req.body.minPlayers,
             maxPlayers: req.body.maxPlayers,
             boxArt: req.body.boxArt,
-            boardgameGeekLink: req.body.boardgameGeekLink
+            boardgameGeekLink: req.body.boardgameGeekLink,
+            playTime: req.body.playTime
         }));
         // Lookup game
         db.updateGame(update, (success: boolean, game: BOARDGAME | undefined) => {

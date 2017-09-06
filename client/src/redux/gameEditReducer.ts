@@ -1,17 +1,20 @@
 import { GameEdit, FetchGameAction } from './constants';
 import { List, Map } from 'immutable';
+import * as Immutable from 'immutable';
 import { BoardgameServerState, INITIAL_STATE, Boardgame } from './state';
 import { 
     GameEditMinPlayersActionSuccess,
     GameEditMaxPlayersActionSuccess,
     GameEditBoxArtActionSuccess,
     GameEditBBGLinkActionSuccess,
+    GameEditPlayTimeActionSuccess,
     GameEditSaveNewActionSuccess,
     UpdateNameNoSave,
     UpdateMinPlayersNoSave,
     UpdateMaxPlayersNoSave,
     UpdateBoxArtNoSave,
-    UpdateBoardgameGeekLinkNoSave
+    UpdateBoardgameGeekLinkNoSave,
+    UpdatePlayTimeNoSave
  } from './gameEditActionTypes'
 import {
     FetchGameSuccess,
@@ -23,11 +26,13 @@ import {
     GameEditBoxArtActionSuccess | 
     GameEditBBGLinkActionSuccess |
     GameEditSaveNewActionSuccess |
+    GameEditPlayTimeActionSuccess |
     UpdateNameNoSave |
     UpdateMinPlayersNoSave |
     UpdateMaxPlayersNoSave |
     UpdateBoxArtNoSave |
     UpdateBoardgameGeekLinkNoSave |
+    UpdatePlayTimeNoSave |
     FetchGameSuccess;
 
 export default function gameEditReducer(state: Boardgame = new Boardgame(), action: AllGameEditActions): Boardgame {
@@ -36,9 +41,11 @@ export default function gameEditReducer(state: Boardgame = new Boardgame(), acti
         case GameEdit.GAME_EDIT_MAX_PLAYERS_SUCCESS:
         case GameEdit.GAME_EDIT_BOX_ART_SUCCESS:
         case GameEdit.GAME_EDIT_BBG_LINK_SUCCESS:
+        case GameEdit.GAME_EDIT_PLAY_TIME_SUCCESS:
         case GameEdit.GAME_EDIT_SAVE_NEW_SUCCESS:
-        case FetchGameAction.FETCH_GAME_SUCCESS:
             return state.merge(action.payload.data.game);
+        case FetchGameAction.FETCH_GAME_SUCCESS:
+            return state = Immutable.fromJS(action.payload.data.game);
         case GameEdit.UPDATE_NAME_NO_SAVE:
             return state.merge({name: action.name});
         case GameEdit.UPDATE_MIN_PLAYERS_NO_SAVE:
@@ -49,6 +56,8 @@ export default function gameEditReducer(state: Boardgame = new Boardgame(), acti
             return state.merge({boxArt: action.boxArt});
         case GameEdit.UPDATE_BBG_LINK_NO_SAVE:
             return state.merge({boardgameGeekLink: action.boardgameGeekLink});
+        case GameEdit.UPDATE_PLAY_TIME_NO_SAVE:
+            return state.merge({playTime: action.playTime});
     }
     return state;
 }

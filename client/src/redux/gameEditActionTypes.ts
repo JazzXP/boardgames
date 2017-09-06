@@ -48,6 +48,16 @@ export type GameEditBBGLinkActionSuccess = {
     payload: AxiosResponse
 }
 
+export type GameEditPlayTimeAction = {
+    type: GameEdit.GAME_EDIT_PLAY_TIME,
+    playTime: string
+}
+
+export type GameEditPlayTimeActionSuccess = {
+    type: GameEdit.GAME_EDIT_PLAY_TIME_SUCCESS,
+    payload: AxiosResponse
+}
+
 export type GameEditSaveNewActionSuccess = {
     type: GameEdit.GAME_EDIT_SAVE_NEW_SUCCESS,
     payload: AxiosResponse
@@ -76,4 +86,9 @@ export type UpdateBoxArtNoSave = {
 export type UpdateBoardgameGeekLinkNoSave = {
     type: GameEdit.UPDATE_BBG_LINK_NO_SAVE,
     boardgameGeekLink: string | undefined
+}
+
+export type UpdatePlayTimeNoSave = {
+    type: GameEdit.UPDATE_PLAY_TIME_NO_SAVE,
+    playTime: string | undefined
 }

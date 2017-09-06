@@ -6,12 +6,14 @@ import {
     GameEditMaxPlayersActionSuccess,
     GameEditBoxArtActionSuccess,
     GameEditBBGLinkActionSuccess,
+    GameEditPlayTimeActionSuccess,
     GameEditSaveNewActionSuccess,
     UpdateNameNoSave,
     UpdateMinPlayersNoSave,
     UpdateMaxPlayersNoSave,
     UpdateBoxArtNoSave,
-    UpdateBoardgameGeekLinkNoSave
+    UpdateBoardgameGeekLinkNoSave,
+    UpdatePlayTimeNoSave
  } from '../src/redux/gameEditActionTypes';
  import {
     FetchGameSuccess,
@@ -34,7 +36,8 @@ class TestGameEditReducer {
             minPlayers: 1,
             maxPlayers: 2,
             boxArt: 'https://boxart.com/boxart.jpg',
-            boardgameGeekLink: 'https://boardgamegeek.com/dummy'
+            boardgameGeekLink: 'https://boardgamegeek.com/dummy',
+            playTime: '10-20min'
         });
     }
 
@@ -116,6 +119,23 @@ class TestGameEditReducer {
         const newState = gameEditReducer(this.createFullBoardgame(), action);
         expect(newState.get('minPlayers')).to.equal(1);
         expect(newState.get('boardgameGeekLink')).to.equal('https://boardgamegeek.com');
+    }
+
+    @test('Reducer merges play time response')
+    testReducerMergesPlayTime() {
+        const action = {
+            type: GameEdit.GAME_EDIT_BBG_LINK_SUCCESS,
+            payload: {
+                data: {
+                    game: {
+                        playTime: '20-30min',
+                    }
+                }
+            }
+        } as GameEditBBGLinkActionSuccess;
+        const newState = gameEditReducer(this.createFullBoardgame(), action);
+        expect(newState.get('minPlayers')).to.equal(1);
+        expect(newState.get('playTime')).to.equal('20-30min');
     }
 
     @test('Reducer merges response for new game')
@@ -201,5 +221,16 @@ class TestGameEditReducer {
         const newState = gameEditReducer(this.createFullBoardgame(), action);
         expect(newState.get('minPlayers')).to.equal(1);
         expect(newState.get('boardgameGeekLink')).to.equal('https://boardgamegeek.com');
+    }
+
+    @test('Reducer updates play time')
+    testReducerPlayTime() {
+        const action = {
+            type: GameEdit.UPDATE_PLAY_TIME_NO_SAVE,
+            playTime: '20-40min'
+        } as UpdatePlayTimeNoSave;
+        const newState = gameEditReducer(this.createFullBoardgame(), action);
+        expect(newState.get('minPlayers')).to.equal(1);
+        expect(newState.get('playTime')).to.equal('20-40min');
     }
 }

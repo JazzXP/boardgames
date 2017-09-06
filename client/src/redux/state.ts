@@ -6,6 +6,7 @@ export interface BOARDGAME {
     maxPlayers?: number,
     boxArt?: string,
     boardgameGeekLink?: string,
+    playTime?: string
 }
 
 export type BOARDGAME_NO_NAME = {
@@ -14,9 +15,10 @@ export type BOARDGAME_NO_NAME = {
     maxPlayers?: number,
     boxArt?: string,
     boardgameGeekLink?: string,
+    playTime?: string
 }
 
-export class Boardgame extends Record({name: '', minPlayers: undefined, maxPlayers: undefined, boxArt: undefined, boardgameGeekLink: undefined} as BOARDGAME) {
+export class Boardgame extends Record({name: '', minPlayers: undefined, maxPlayers: undefined, boxArt: undefined, boardgameGeekLink: undefined, playTime: undefined} as BOARDGAME) {
     public toJS(): any {
         return JSON.parse(JSON.stringify(super.toJS()));
     }

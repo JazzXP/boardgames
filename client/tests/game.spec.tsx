@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Game, GameContainer } from '../src/components/Game';
 import { Route, BrowserRouter } from 'react-router-dom';
 import { expect } from 'chai';
-import { suite, test } from 'mocha-typescript'
+import { suite, test, slow } from 'mocha-typescript'
 import { mount, render, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
 import { createStore, Store } from 'redux';
@@ -32,7 +32,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={0} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(0);
+        const input = wrapper.findWhere(node => node.props().label === 'Name:').find('input');
         (input.getNode() as any).value = 'Blah';
         input.simulate('blur');
     }
@@ -112,7 +112,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(0);
+        const input = wrapper.findWhere(node => node.props().label === 'Min Players:').find('input');
         (input.getNode() as any).value = 2;
         input.simulate('blur');
     }
@@ -133,7 +133,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(0);
+        const input = wrapper.findWhere(node => node.props().label === 'Min Players:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -149,7 +149,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(1);
+        const input = wrapper.findWhere(node => node.props().label === 'Max Players:').find('input');
         (input.getNode() as any).value = 20;
         input.simulate('blur');
     }
@@ -170,7 +170,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(1);
+        const input = wrapper.findWhere(node => node.props().label === 'Max Players:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -186,7 +186,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={0} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(2);
+        const input = wrapper.findWhere(node => node.props().label === 'Max Players:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -202,7 +202,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(2);
+        const input = wrapper.findWhere(node => node.props().label === 'Box Art:').find('input');
         (input.getNode() as any).value = 'https://blah.com/image.png';
         input.simulate('blur');
     }
@@ -223,7 +223,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(2);
+        const input = wrapper.findWhere(node => node.props().label === 'Box Art:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -244,7 +244,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={0} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(3);
+        const input = wrapper.findWhere(node => node.props().label === 'Box Art:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -260,7 +260,7 @@ class TestGame {
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(3);
+        const input = wrapper.findWhere(node => node.props().label === 'Boardgame Geek Link:').find('input');
         (input.getNode() as any).value = 'https://blah.com';
         input.simulate('blur');
     }
@@ -281,7 +281,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={1} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(3);
+        const input = wrapper.findWhere(node => node.props().label === 'Boardgame Geek Link:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -302,7 +302,7 @@ class TestGame {
             }); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" game={ new BoardgameServerState(Immutable.fromJS({game: { name:'TestGame' }})) } editMode={true} gameMode={0} /></BrowserRouter></Provider>);
-        const input = wrapper.find('input').at(4);
+        const input = wrapper.findWhere(node => node.props().label === 'Boardgame Geek Link:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
     }
@@ -326,7 +326,7 @@ class TestGame {
         );
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name={game.get('name')} game={game} editMode={true} gameMode={1} /></BrowserRouter></Provider>);
 
-        const input = wrapper.find('input').at(0);
+        const input = wrapper.findWhere(node => node.props().label === 'Min Players:').find('input');
         (input.getNode() as any).value = 2;
         input.simulate('blur');
     }
@@ -350,7 +350,7 @@ class TestGame {
         );
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name={game.get('name')} game={game} editMode={true} gameMode={1} /></BrowserRouter></Provider>);
 
-        const input = wrapper.find('input').at(1);
+        const input = wrapper.findWhere(node => node.props().label === 'Max Players:').find('input');
         (input.getNode() as any).value = 20;
         input.simulate('blur');
     }
@@ -374,7 +374,7 @@ class TestGame {
         );
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name={game.get('name')} game={game} editMode={true} gameMode={1} /></BrowserRouter></Provider>);
 
-        const input = wrapper.find('input').at(2);
+        const input = wrapper.findWhere(node => node.props().label === 'Box Art:').find('input');
         (input.getNode() as any).value = 'https://blah.com/boxart.png';
         input.simulate('blur');
     }
@@ -398,8 +398,64 @@ class TestGame {
         );
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name={game.get('name')} game={game} editMode={true} gameMode={1} /></BrowserRouter></Provider>);
 
-        const input = wrapper.find('input').at(3);
+        const input = wrapper.findWhere(node => node.props().label === 'Boardgame Geek Link:').find('input');
         (input.getNode() as any).value = 'https://blah.com';
         input.simulate('blur');
+    }
+
+    @test('setting values with same data does nothing', slow(500))
+    testValueNotChanging(done: () => void) {
+        let called = false;
+        const game = Map({
+            name : "TestGame",
+            minPlayers: 1,
+            maxPlayers: 2,
+            boxArt: 'blah',
+            boardgameGeekLink: 'blah2'
+        });
+        const store: Store<Map<any, any>> = createStore((state, action) => { 
+                called = true;
+                return Map({
+                    "editMode": true, 
+                    "gameMode": 0,
+                    "game": game,
+                }); 
+            }
+        );
+        const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer 
+            name={game.get('name') as string} 
+            minPlayers={game.get('minPlayers') as number} 
+            maxPlayers={game.get('maxPlayers') as number} 
+            boxArt={game.get('boxArt') as string} 
+            boardgameGeekLink={game.get('boardgameGeekLink') as string} 
+            game={new BoardgameServerState({game: game})} 
+            editMode={true} 
+            gameMode={0} 
+        /></BrowserRouter></Provider>);
+        called = false;
+        
+        function getInput(name: string) {
+            return wrapper.findWhere(node => node.props().label === name).find('input');
+        }
+
+        var input = getInput('Name:');
+        (input.getNode() as any).value = 'TestGame';
+        input.simulate('blur');
+        input = getInput('Min Players:');
+        (input.getNode() as any).value = 1;
+        input.simulate('blur');
+        input = getInput('Max Players:');
+        (input.getNode() as any).value = 2;
+        input.simulate('blur');
+        input = getInput('Box Art:');
+        (input.getNode() as any).value = 'blah';
+        input.simulate('blur');
+        input = getInput('Boardgame Geek Link:');
+        (input.getNode() as any).value = 'blah2';
+        input.simulate('blur');
+        setTimeout(() => {
+            if (!called)
+                done();
+        }, 50);
     }
 }

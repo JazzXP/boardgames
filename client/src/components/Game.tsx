@@ -38,11 +38,11 @@ export interface GameProps {
 
 export interface GamesConnectedDispatch {
     editClickAction?: (edit: boolean, game: BOARDGAME) => void;
-    updateNameAction?: (e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updateMinPlayersAction?: (e: React.FormEvent<HTMLInputElement>) => void;
-    updateMaxPlayersAction?: (e: React.FormEvent<HTMLInputElement>) => void;
-    updateBoxArtAction?: (e: React.FormEvent<HTMLInputElement>) => void;
-    updateBBGLinkAction?: (e: React.FormEvent<HTMLInputElement>) => void;
+    updateNameAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updateMinPlayersAction?: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updateMaxPlayersAction?: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updateBoxArtAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updateBBGLinkAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
 }
 
 export interface GameState {}
@@ -62,11 +62,11 @@ export class Game extends React.Component<GameProps & GamesConnectedDispatch, Ga
             boardgameGeekLink: this.props.boardgameGeekLink
         }
         return <div className="game">
-            <DisplayField label="Name:" fieldVal={this.props.name} editMode={this.props.editMode && this.props.gameMode==GameMode.NEW} onBlur={this.props.updateNameAction} /><br />
-            <DisplayField label="Min Players:" fieldVal={this.props.minPlayers as any as string} editMode={this.props.editMode} onBlur={this.props.updateMinPlayersAction} /><br />
-            <DisplayField label="Max Players:" fieldVal={this.props.maxPlayers as any as string} editMode={this.props.editMode} onBlur={this.props.updateMaxPlayersAction} /><br />
-            <DisplayImageField label="Box Art:" imageURL={this.props.boxArt} editMode={this.props.editMode} onBlur={this.props.updateBoxArtAction} /><br />
-            <DisplayURLField label="Boardgame Geek Link:" url={this.props.boardgameGeekLink} editMode={this.props.editMode} onBlur={this.props.updateBBGLinkAction} /><br />
+            <DisplayField label="Name:" fieldVal={this.props.name} editMode={this.props.editMode && this.props.gameMode==GameMode.NEW} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateNameAction && this.props.updateNameAction(this.props.name, e)} /><br />
+            <DisplayField label="Min Players:" fieldVal={this.props.minPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMinPlayersAction && this.props.updateMinPlayersAction(this.props.minPlayers, e)} /><br />
+            <DisplayField label="Max Players:" fieldVal={this.props.maxPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMaxPlayersAction && this.props.updateMaxPlayersAction(this.props.maxPlayers, e)} /><br />
+            <DisplayImageField label="Box Art:" imageURL={this.props.boxArt} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBoxArtAction && this.props.updateBoxArtAction(this.props.boxArt, e)} /><br />
+            <DisplayURLField label="Boardgame Geek Link:" url={this.props.boardgameGeekLink} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBBGLinkAction && this.props.updateBBGLinkAction(this.props.boardgameGeekLink, e)} /><br />
             {this.props.loggedIn ? <EditButton editMode={this.props.editMode} clickAction={this.props.editClickAction} labelDone="Done" labelEdit="Edit" game={game} /> : "" }
             <Link to="/">Back to Main</Link>
         </div>;
@@ -98,61 +98,71 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 dispatch(saveNewGame(game))
             }
         },
-        updateNameAction: (e: React.SyntheticEvent<HTMLFormElement>): void => {
-            dispatch(updateNameNoSave(e.currentTarget.value)); // Can only be called when GameMode.NEW
-        },
-        updateMinPlayersAction: (e: React.FormEvent<HTMLInputElement>): void => {
-            if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
-                const game = ownProps.game as BoardgameServerState;
-                let val = e.currentTarget.value.length > 0 ? parseInt(e.currentTarget.value) : undefined;
-                dispatch(setGameMinPlayersAction(game.get('name'), val));
-            }
-            else {
-                dispatch(updateMinPlayersNoSave(parseInt(e.currentTarget.value)));
+        updateNameAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (e.currentTarget.value !== oldval) {
+                dispatch(updateNameNoSave(e.currentTarget.value)); // Can only be called when GameMode.NEW
             }
         },
-        updateMaxPlayersAction: (e: React.FormEvent<HTMLInputElement>): void => {
-            if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
-                const game = ownProps.game as BoardgameServerState;
-                let val = e.currentTarget.value.length > 0 ? parseInt(e.currentTarget.value) : undefined;
-                dispatch(setGameMaxPlayersAction(game.get('name'), val));
-            }
-            else {
-                if (e.currentTarget.value.length > 0) {
-                    dispatch(updateMaxPlayersNoSave(parseInt(e.currentTarget.value)));
+        updateMinPlayersAction: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (parseInt(e.currentTarget.value) !== oldval) {
+                if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
+                    const game = ownProps.game as BoardgameServerState;
+                    let val = e.currentTarget.value.length > 0 ? parseInt(e.currentTarget.value) : undefined;
+                    dispatch(setGameMinPlayersAction(game.get('name'), val));
                 }
                 else {
-                    dispatch(updateMaxPlayersNoSave(undefined));
+                    dispatch(updateMinPlayersNoSave(parseInt(e.currentTarget.value)));
                 }
             }
         },
-        updateBoxArtAction: (e: React.FormEvent<HTMLInputElement>): void => {
-            if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
-                const game = ownProps.game as BoardgameServerState;
-                let val = e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined;
-                dispatch(setGameBoxArtAction(game.get('name'), val));
-            }
-            else {
-                if (e.currentTarget.value.length > 0) {
-                    dispatch(updateBoxArtNoSave(e.currentTarget.value));
+        updateMaxPlayersAction: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (parseInt(e.currentTarget.value) !== oldval) {
+                if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
+                    const game = ownProps.game as BoardgameServerState;
+                    let val = e.currentTarget.value.length > 0 ? parseInt(e.currentTarget.value) : undefined;
+                    dispatch(setGameMaxPlayersAction(game.get('name'), val));
                 }
                 else {
-                    dispatch(updateBoxArtNoSave(undefined));
+                    if (e.currentTarget.value.length > 0) {
+                        dispatch(updateMaxPlayersNoSave(parseInt(e.currentTarget.value)));
+                    }
+                    else {
+                        dispatch(updateMaxPlayersNoSave(undefined));
+                    }
                 }
             }
         },
-        updateBBGLinkAction: (e: React.FormEvent<HTMLInputElement>): void => {
-            if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
-                const game = ownProps.game as BoardgameServerState;
-                let val = e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined;
-                dispatch(setGameBBGLinkAction(game.get('name'), val));
-            }
-            else {
-                if (e.currentTarget.value.length > 0) {
-                    dispatch(updateBoardgameGeekLinkNoSave(e.currentTarget.value));
+        updateBoxArtAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (e.currentTarget.value !== oldval) {
+                if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
+                    const game = ownProps.game as BoardgameServerState;
+                    let val = e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined;
+                    dispatch(setGameBoxArtAction(game.get('name'), val));
                 }
                 else {
-                    dispatch(updateBoardgameGeekLinkNoSave(undefined));
+                    if (e.currentTarget.value.length > 0) {
+                        dispatch(updateBoxArtNoSave(e.currentTarget.value));
+                    }
+                    else {
+                        dispatch(updateBoxArtNoSave(undefined));
+                    }
+                }
+            }
+        },
+        updateBBGLinkAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+            if (e.currentTarget.value !== oldval) {
+                if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
+                    const game = ownProps.game as BoardgameServerState;
+                    let val = e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined;
+                    dispatch(setGameBBGLinkAction(game.get('name'), val));
+                }
+                else {
+                    if (e.currentTarget.value.length > 0) {
+                        dispatch(updateBoardgameGeekLinkNoSave(e.currentTarget.value));
+                    }
+                    else {
+                        dispatch(updateBoardgameGeekLinkNoSave(undefined));
+                    }
                 }
             }
         }

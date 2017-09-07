@@ -1,0 +1,1 @@
+export default 'localhost:27017/boardgames';

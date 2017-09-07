@@ -3,6 +3,7 @@ import { BOARDGAME, BOARDGAME_UPDATE } from '../state';
 import { injectable } from 'inversify';
 import { List } from 'immutable';
 import * as Monk from 'monk';
+import dbConfig from '../config/db_config';
 
 import IDB from '../interfaces/IDB';
 
@@ -11,7 +12,7 @@ export class DB implements IDB {
     private db: Monk.IMonkManager;
 
     constructor() {
-        this.db = Monk.default('localhost:27017/boardgames');
+        this.db = Monk.default(dbConfig);
     }
     addGame(game: BOARDGAME_UPDATE, callback: (success: boolean, gameUpdate: BOARDGAME | undefined) => void): void {
         this.db.get('games').insert(game)

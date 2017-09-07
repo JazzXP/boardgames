@@ -20,12 +20,20 @@ class TestEditModeReducer {
         expect(newState).to.be.false;
     }
 
-    @test('Reducer passes through state when editMode undefined')
-    testReducerSetPassesStateWhenUndefined() {
+    @test('Reducer passes through true state when editMode undefined')
+    testReducerSetPassesTrueStateWhenUndefined() {
         const initialState = true;
         const hackedReducer: (state: any, action: any)=>boolean = editModeReducer;
         const newState = hackedReducer(initialState, {type: SET_EDIT_MODE, editMode: undefined});
         expect(newState).to.be.true;
+    }
+
+    @test('Reducer passes through false state when editMode undefined')
+    testReducerSetPassesFalseStateWhenUndefined() {
+        const initialState = false;
+        const hackedReducer: (state: any, action: any)=>boolean = editModeReducer;
+        const newState = hackedReducer(initialState, {type: SET_EDIT_MODE, editMode: undefined});
+        expect(newState).to.be.false;
     }
 
     @test('Reducer with undefined state')

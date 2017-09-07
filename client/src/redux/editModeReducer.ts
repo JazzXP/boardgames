@@ -1,8 +1,6 @@
 import { 
     SetEditMode
 } from './action_types'
-import { EditModeState } from './editModeState';
-import { SET_EDIT_MODE } from './constants';
 
 type AllEditActions = SetEditMode;
 

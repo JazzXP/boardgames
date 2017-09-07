@@ -489,7 +489,7 @@ class TestGame {
             maxPlayers: 2,
             boxArt: 'blah',
             boardgameGeekLink: 'blah2',
-            playTime: '10-20mins'
+            playTime: '10-20min'
         });
         const store: Store<Map<any, any>> = createStore((state, action) => { 
                 called = true;
@@ -506,7 +506,7 @@ class TestGame {
             maxPlayers={game.get('maxPlayers') as number} 
             boxArt={game.get('boxArt') as string} 
             boardgameGeekLink={game.get('boardgameGeekLink') as string} 
-            playTime='10-20mins'
+            playTime='10-20min'
             game={new BoardgameServerState({game: game})} 
             editMode={true} 
             gameMode={0} 
@@ -533,7 +533,7 @@ class TestGame {
         (input.getNode() as any).value = 'blah2';
         input.simulate('blur');
         input = getInput('Play Time:');
-        (input.getNode() as any).value = '10-20mins';
+        (input.getNode() as any).value = '10-20min';
         input.simulate('blur');
         setTimeout(() => {
             if (!called)

@@ -158,7 +158,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
             if (parseInt(e.currentTarget.value) !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;
-                    let val = e.currentTarget.value.length > 0 ? parseInt(e.currentTarget.value) : undefined;
+                    let val = parseInt(e.currentTarget.value); // Can assume exist due to validation on the field
                     dispatch(setGameMinPlayersAction(game.get('name'), val));
                 }
                 else {

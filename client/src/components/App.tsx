@@ -18,6 +18,7 @@ import gamesReducer from '../redux/gamesReducer';
 import editModeReducer from '../redux/editModeReducer';
 import { BoardgameServerState } from '../redux/state';
 import { SET_EDIT_MODE } from '../redux/constants';
+import { doValidateLogin } from '../redux/loginActions';
 
 export class App extends React.Component<{className: string}, {}> {
     public store: Store<BoardgameServerState>;
@@ -40,6 +41,10 @@ export class App extends React.Component<{className: string}, {}> {
             ),
             applyMiddleware(axiosMiddleware(this.client))
         ) as Store<BoardgameServerState>;
+    }
+
+    componentWillMount() {
+        this.store.dispatch(doValidateLogin());
     }
 
     render() {

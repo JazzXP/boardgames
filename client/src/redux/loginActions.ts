@@ -3,6 +3,7 @@ import { LoginActions } from './constants';
 type LOGIN_ACTION = {
     type:   LoginActions.DO_LOGIN |
             LoginActions.DO_LOGOUT |
+            LoginActions.DO_VALIDATE_LOGIN |
             '';
     username?: string;
     password?: string;
@@ -32,6 +33,20 @@ export function doLogout(): LOGIN_ACTION {
             request: {
                 method: 'post',
                 url: `/auth/logout`,
+                data: {
+                }
+            }
+        }
+    }
+}
+
+export function doValidateLogin(): LOGIN_ACTION {
+    return {
+        type: LoginActions.DO_VALIDATE_LOGIN,
+        payload: {
+            request: {
+                method: 'get',
+                url: `/auth/`,
                 data: {
                 }
             }

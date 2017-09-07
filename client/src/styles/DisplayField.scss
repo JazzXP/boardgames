@@ -1,6 +1,20 @@
 .displayField {
-    :first-child {
+    > :first-child {
         display: block;
+        font-weight: bold;
+    }
+    padding-bottom: 10px;
+    display: block;
+    input {
+        font-weight: normal;
+    }
+}
+
+.error {
+    border: 1px solid #B00;
+    > :last-child {
+        margin-left: 10px;
+        color: #B00;
         font-weight: bold;
     }
 }

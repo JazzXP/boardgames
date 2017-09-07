@@ -24,6 +24,11 @@ import { DisplayImageField } from './DisplayImageField';
 import { DisplayURLField } from './DisplayURLField';
 import { EditButton } from './EditButton';
 import { GameMode } from '../redux/constants';
+import numberValidator from '../validators/numberValidator';
+import clearOrNumberValidator from '../validators/clearOrNumberValidator';
+import urlValidator from '../validators/urlValidator';
+import imageURLValidator from '../validators/imageURLValidator';
+import regexValidator from '../validators/regexValidator';
 
 
 export interface GameProps {
@@ -39,14 +44,16 @@ export interface GameProps {
     loggedIn?: boolean
 }
 
+type ReactEvent = React.SyntheticEvent<HTMLFormElement>;
+
 export interface GamesConnectedDispatch {
     editClickAction?: (edit: boolean, game: BOARDGAME) => void;
-    updateNameAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updateMinPlayersAction?: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updateMaxPlayersAction?: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updateBoxArtAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updateBBGLinkAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
-    updatePlayTimeAction?: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>) => void;
+    updateNameAction?: (oldval: string | undefined, e: ReactEvent) => void;
+    updateMinPlayersAction?: (oldval: number | undefined, e: ReactEvent) => void;
+    updateMaxPlayersAction?: (oldval: number | undefined, e: ReactEvent) => void;
+    updateBoxArtAction?: (oldval: string | undefined, e: ReactEvent) => void;
+    updateBBGLinkAction?: (oldval: string | undefined, e: ReactEvent) => void;
+    updatePlayTimeAction?: (oldval: string | undefined, e: ReactEvent) => void;
 }
 
 export interface GameState {}
@@ -56,6 +63,7 @@ const defaultMinPlayers = 0;
 const defaultMaxPlayers = undefined;
 const defaultBoxArt = undefined;
 const defaultBoardgameGeekLink = undefined;
+
 export class Game extends React.Component<GameProps & GamesConnectedDispatch, GameState> {
     render() {
         let game: BOARDGAME = {
@@ -66,13 +74,49 @@ export class Game extends React.Component<GameProps & GamesConnectedDispatch, Ga
             boardgameGeekLink: this.props.boardgameGeekLink,
             playTime: this.props.playTime
         }
+
         return <div className="game">
-            <DisplayField label="Name:" fieldVal={this.props.name} editMode={this.props.editMode && this.props.gameMode==GameMode.NEW} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateNameAction && this.props.updateNameAction(this.props.name, e)} /><br />
-            <DisplayField label="Min Players:" fieldVal={this.props.minPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMinPlayersAction && this.props.updateMinPlayersAction(this.props.minPlayers, e)} /><br />
-            <DisplayField label="Max Players:" fieldVal={this.props.maxPlayers as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateMaxPlayersAction && this.props.updateMaxPlayersAction(this.props.maxPlayers, e)} /><br />
-            <DisplayField label="Play Time:" fieldVal={this.props.playTime as any as string} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updatePlayTimeAction && this.props.updatePlayTimeAction(this.props.playTime, e)} /><br />
-            <DisplayImageField label="Box Art:" imageURL={this.props.boxArt} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBoxArtAction && this.props.updateBoxArtAction(this.props.boxArt, e)} /><br />
-            <DisplayURLField label="Boardgame Geek Link:" url={this.props.boardgameGeekLink} editMode={this.props.editMode} onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBBGLinkAction && this.props.updateBBGLinkAction(this.props.boardgameGeekLink, e)} /><br />
+            <DisplayField 
+                label="Name:" 
+                fieldVal={this.props.name} 
+                editMode={this.props.editMode && this.props.gameMode==GameMode.NEW} 
+                onBlur={(e: ReactEvent) => this.props.updateNameAction && this.props.updateNameAction(this.props.name, e)} 
+            />
+            <DisplayField 
+                label="Min Players:"
+                fieldVal={this.props.minPlayers as any as string}
+                editMode={this.props.editMode}
+                validator={numberValidator({error:'Must be a number'})}
+                onBlur={(e: ReactEvent) => this.props.updateMinPlayersAction && this.props.updateMinPlayersAction(this.props.minPlayers, e)} 
+            />
+            <DisplayField 
+                label="Max Players:"
+                fieldVal={this.props.maxPlayers as any as string}
+                editMode={this.props.editMode}
+                validator={clearOrNumberValidator({error:'Must be a number'})}
+                onBlur={(e: ReactEvent) => this.props.updateMaxPlayersAction && this.props.updateMaxPlayersAction(this.props.maxPlayers, e)} 
+            />
+            <DisplayField 
+                label="Play Time:" 
+                fieldVal={this.props.playTime as any as string} 
+                editMode={this.props.editMode} 
+                validator={regexValidator({error:'Format must be #-#min or #-#hours', regex:/^(\d+-\d+(min|hours)|)$/})}
+                onBlur={(e: ReactEvent) => this.props.updatePlayTimeAction && this.props.updatePlayTimeAction(this.props.playTime, e)} 
+            />
+            <DisplayImageField 
+                label="Box Art:" 
+                imageURL={this.props.boxArt} 
+                editMode={this.props.editMode} 
+                validator={urlValidator({error:'Must be a valid URL'})} 
+                onBlur={(e: React.SyntheticEvent<HTMLFormElement>) => this.props.updateBoxArtAction && this.props.updateBoxArtAction(this.props.boxArt, e)} 
+            />
+            <DisplayURLField 
+                label="Boardgame Geek Link:" 
+                url={this.props.boardgameGeekLink} 
+                editMode={this.props.editMode} 
+                validator={imageURLValidator({error:'Must be a valid image link'})} 
+                onBlur={(e: ReactEvent) => this.props.updateBBGLinkAction && this.props.updateBBGLinkAction(this.props.boardgameGeekLink, e)} 
+            />
             {this.props.loggedIn ? <EditButton editMode={this.props.editMode} clickAction={this.props.editClickAction} labelDone="Done" labelEdit="Edit" game={game} /> : "" }
             <Link to="/">Back to Main</Link>
         </div>;
@@ -105,12 +149,12 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 dispatch(saveNewGame(game))
             }
         },
-        updateNameAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updateNameAction: (oldval: string | undefined, e: ReactEvent): void => {
             if (e.currentTarget.value !== oldval) {
                 dispatch(updateNameNoSave(e.currentTarget.value)); // Can only be called when GameMode.NEW
             }
         },
-        updateMinPlayersAction: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updateMinPlayersAction: (oldval: number | undefined, e: ReactEvent): void => {
             if (parseInt(e.currentTarget.value) !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;
@@ -122,7 +166,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 }
             }
         },
-        updateMaxPlayersAction: (oldval: number | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updateMaxPlayersAction: (oldval: number | undefined, e: ReactEvent): void => {
             if (parseInt(e.currentTarget.value) !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;
@@ -139,7 +183,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 }
             }
         },
-        updatePlayTimeAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updatePlayTimeAction: (oldval: string | undefined, e: ReactEvent): void => {
             if (e.currentTarget.value !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;
@@ -156,7 +200,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 }
             }
         },
-        updateBoxArtAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updateBoxArtAction: (oldval: string | undefined, e: ReactEvent): void => {
             if (e.currentTarget.value !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;
@@ -173,7 +217,7 @@ function mapDispatchToProps(dispatch: Dispatch<BOARDGAME_SERVER_ACTION | BOARDGA
                 }
             }
         },
-        updateBBGLinkAction: (oldval: string | undefined, e: React.SyntheticEvent<HTMLFormElement>): void => {
+        updateBBGLinkAction: (oldval: string | undefined, e: ReactEvent): void => {
             if (e.currentTarget.value !== oldval) {
                 if (ownProps && ownProps.game && ownProps.gameMode == GameMode.EDIT) {
                     const game = ownProps.game as BoardgameServerState;

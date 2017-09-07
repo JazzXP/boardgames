@@ -117,14 +117,10 @@ class TestGame {
         input.simulate('blur');
     }
 
-    @test('clear min players field returns undefined')
+    @test('clear min players field fails')
     testClearMinPlayersField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
         const store: Store<Map<any, any>> = createStore((state, action) => { 
-            if (action.type == 'GAME_EDIT_MIN_PLAYERS') {
-                expect(action.payload.request.data.minPlayers).is.undefined;
-                done();
-            }
             return Immutable.fromJS({
                 "editMode":true,
                 "game": {
@@ -136,6 +132,9 @@ class TestGame {
         const input = wrapper.findWhere(node => node.props().label === 'Min Players:').find('input');
         (input.getNode() as any).value = '';
         input.simulate('blur');
+        const comp = wrapper.findWhere(node => node.props().label === 'Min Players:');
+        expect((comp.getNode() as any).state.error).not.to.be.undefined;
+        done();
     }
 
     @test('update max players field')
@@ -310,16 +309,16 @@ class TestGame {
     @test('update play time field')
     testUpdatePlayTimeField(done: ()=>void) {
         // Because this is async, we have to validate in the reducer
-        const store: Store<Map<any, any>> = createStore((state, action) => { 
+        const store: Store<Map<any, any>> = createStore((state, action) => {
             if (action.type == 'GAME_EDIT_UPDATE_PLAY_TIME_NO_SAVE') {
-                expect(action.playTime).to.equal('10-20mins');
+                expect(action.playTime).to.equal('10-20min');
                 done();
             }
             return Map({"editMode":true}); 
         });
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name="TestGame" editMode={true} gameMode={1} /></BrowserRouter></Provider>);
         const input = wrapper.findWhere(node => node.props().label === 'Play Time:').find('input');
-        (input.getNode() as any).value ='10-20mins';
+        (input.getNode() as any).value ='10-20min';
         input.simulate('blur');
     }
 
@@ -464,7 +463,7 @@ class TestGame {
         });
         const store: Store<Map<any, any>> = createStore((state, action) => { 
                 if (action.payload) {
-                    expect(action.payload.request.data.playTime).to.equal('10-20mins');
+                    expect(action.payload.request.data.playTime).to.equal('10-20min');
                     done();
                 }                    
                 return Map({
@@ -477,7 +476,7 @@ class TestGame {
         const wrapper = mount(<Provider store={store}><BrowserRouter><GameContainer name={game.get('name')} game={game} editMode={true} gameMode={1} /></BrowserRouter></Provider>);
 
         const input = wrapper.findWhere(node => node.props().label === 'Play Time:').find('input');
-        (input.getNode() as any).value = '10-20mins';
+        (input.getNode() as any).value = '10-20min';
         input.simulate('blur');
     }
 

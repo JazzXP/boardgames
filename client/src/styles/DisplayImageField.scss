@@ -6,4 +6,15 @@
     img {
         width: 150px;
     }
+    padding-bottom: 10px;
+    display: block;
+}
+
+.error {
+    border: 1px solid #B00;
+    > :last-child {
+        margin-left: 10px;
+        color: #B00;
+        font-weight: bold;
+    }
 }

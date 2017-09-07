@@ -12,8 +12,8 @@ export class AuthenticationRouter {
     }
 
     public loginPage(req: Request, res: Response, next: NextFunction) { 
-        console.log(req.user);
         const response = {
+            ...(<any>req).flash(),
             "loggedIn" : (req.user)?true:false
         }
         res.send(response)

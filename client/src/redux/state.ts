@@ -30,10 +30,11 @@ export type BOARDGAME_SERVER_STATE = {
     game?: Boardgame,
     payload?: any,
     editMode?: boolean,
-    loggedIn?: boolean
+    loggedIn?: boolean,
+    loginErrorMessages?: Array<string>
 }
 
-export class BoardgameServerState extends Record({games: List<Boardgame>(), game: undefined, state: undefined, editMode: false, loggedIn: undefined} as BOARDGAME_SERVER_STATE) {
+export class BoardgameServerState extends Record({games: List<Boardgame>(), game: undefined, state: undefined, editMode: false, loggedIn: undefined, loginErrorMessages: undefined} as BOARDGAME_SERVER_STATE) {
     public toJS(): any {
         return JSON.parse(JSON.stringify(super.toJS()));
     }

@@ -9,6 +9,7 @@ import { doLogin, doLogout } from '../redux/loginActions';
 
 export interface LoginProps {
     loggedIn?: boolean
+    loginErrorMessages?: Array<string>
 }
 
 export interface LoginConnectedDispatch {
@@ -29,9 +30,12 @@ export class Login extends React.Component<LoginProps & LoginConnectedDispatch, 
             password: ''
         })
     }
+
     render() {
+        const errors = (this.props.loginErrorMessages && this.props.loginErrorMessages.length > 0 ) ? this.props.loginErrorMessages.map((message) => <li key={message.replace(' ', '')}>{message}</li>) : undefined;
         return !this.props.loggedIn ?
         <div className={styles.login}>
+            {errors ? <ul className={styles.error}>{errors}</ul>:''}
             <label>Username:</label><input onChange={(e) => this.setState({username: e.currentTarget.value})} /><br />
             <label>Password:</label><input type="password" onChange={(e) => this.setState({password: e.currentTarget.value})}  /><br />
             <button onClick={()=>{this.props.loginClickAction && this.props.loginClickAction(this.state.username!, this.state.password!)}}>Login</button>
@@ -44,7 +48,8 @@ export class Login extends React.Component<LoginProps & LoginConnectedDispatch, 
 
 function mapStateToProps(state: BoardgameServerState, ownProps: LoginProps): LoginProps {
     return {
-        loggedIn: state.get('loggedIn')
+        loggedIn: state.get('loggedIn'),
+        loginErrorMessages: state.get('loginErrorMessages')
     }
 }
 
